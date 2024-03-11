@@ -12,6 +12,5 @@ return {
         require "user.configs.gitignore"
         require "user.configs.autosave"
         require "user.configs.cmp"
-        require "user.configs.codeium"
     end
 }
