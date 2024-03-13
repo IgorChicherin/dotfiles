@@ -7,10 +7,8 @@ return {
         }
     },
     polish = function()
-        -- require "user.configs.cmp"
         require "user.configs.cmake-tools"
         require "user.configs.gitignore"
-        require "user.configs.autosave"
         require "user.configs.codeium"
     end
 }
