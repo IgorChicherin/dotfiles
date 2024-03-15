@@ -7,7 +7,21 @@ return {
             ["<leader>hw"] = {":HopWord<CR>", desc = "Hop Word"},
             ["<leader>hc"] = {":HopChar1<CR>", desc = "Hop one character"},
             ["<leader>ht"] = {":HopChar2<CR>", desc = "Hop two characters"},
-            ["<leader>hp"] = {":HopPattern<CR>", desc = "Hop two pattern"}
+            ["<leader>hp"] = {":HopPattern<CR>", desc = "Hop two pattern"},
+            ["<tab>"] = {
+                function()
+                    require("astronvim.utils.buffer").nav(vim.v.count > 0 and
+                                                              vim.v.count or 1)
+                end,
+                desc = "Next buffer"
+            },
+            ["<S-tab>"] = {
+                function()
+                    require("astronvim.utils.buffer").nav(
+                        -(vim.v.count > 0 and vim.v.count or 1))
+                end,
+                desc = "Previous buffer"
+            }
         }
     },
     polish = function()
