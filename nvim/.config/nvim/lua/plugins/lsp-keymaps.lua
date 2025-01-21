@@ -1,9 +1,6 @@
 return {
 	{
 		"neovim/nvim-lspconfig",
-		dependencies = {
-			"hrsh7th/nvim-cmp",
-		},
 		opts = function()
 			local keys = require("lazyvim.plugins.lsp.keymaps").get()
 			local cmp = require("cmp")
