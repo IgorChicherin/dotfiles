@@ -1,4 +1,7 @@
 return {
+	{ import = "lazyvim.plugins.extras.lang.go" },
+	{ import = "lazyvim.plugins.extras.lang.python" },
+	{ import = "lazyvim.plugins.extras.coding.nvim-cmp" },
 	{
 		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
 		-- used for completion, annotations and signatures of Neovim apis
@@ -26,6 +29,7 @@ return {
 			{ "j-hui/fidget.nvim", opts = {} },
 
 			-- Allows extra capabilities provided by nvim-cmp
+			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
