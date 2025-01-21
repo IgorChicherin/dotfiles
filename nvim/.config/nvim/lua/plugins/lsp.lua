@@ -1,4 +1,7 @@
 return {
+	{ import = "lazyvim.plugins.extras.lang.go" },
+	{ import = "lazyvim.plugins.extras.lang.python" },
+	{ import = "lazyvim.plugins.extras.coding.nvim-cmp" },
 	{
 		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
 		-- used for completion, annotations and signatures of Neovim apis
