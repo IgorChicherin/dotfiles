@@ -4,14 +4,17 @@ local wezterm = require("wezterm")
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+config.font = wezterm.font_with_fallback({ "0xProto Nerd Font", "JetBrains Mono" })
+config.font_size = 14
+
 local is_darwin = wezterm.target_triple:find("darwin") ~= nil
 local is_linux = wezterm.target_triple:find("linux") ~= nil
 local is_windows = wezterm.target_triple:find("windows") ~= nil
 
-if is_linux then
-	-- Hyprland fix
-	config.enable_wayland = false
-end
+-- if is_linux then
+-- 	-- Hyprland fix
+-- 	config.enable_wayland = false
+-- end
 
 if is_windows then
 	config.default_prog = { "powershell" }
