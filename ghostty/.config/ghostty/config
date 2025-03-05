@@ -1,3 +1,6 @@
 font-family="0xProto Nerd Font Mono"  
 font-size=16 
 theme=dark:tokyonight_moon,light:tokyonight-day
+
+# ssh compatibility fix
+shell-integration-features = sudo
