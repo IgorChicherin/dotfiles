@@ -256,6 +256,12 @@ spawn-at-startup "waybar"
 spawn-at-startup "mako"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "xwayland-satellite"
+spawn-at-startup "firefox"
+spawn-at-startup "wezterm"
+spawn-at-startup "com.discordapp.Discord"
+spawn-at-startup "com.rtosta.zapzap"
+spawn-at-startup "org.telegram.desktop"
+
 
 environment {
     DISPLAY ":0"
@@ -345,7 +351,8 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+T { spawn "ghostty"; }
+    Mod+T { spawn "wezterm"; }
+    Mod+E { spawn "nautilus"; }
     Alt+Space { spawn "fuzzel"; }
     Super+Alt+L { spawn "wlogout"; }
 
