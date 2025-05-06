@@ -252,7 +252,7 @@ layout {
 // spawn-at-startup "alacritty" "-e" "fish"
 
 spawn-at-startup "swaybg" "-i" "/home/ashzak/wallpaper.png"
-spawn-at-startup "waybar"
+spawn-at-startup "waybar" "-c"  "/home/ashzak/.config/waybar/config" "-s" "/home/ashzak/.config/waybar/style.css"
 spawn-at-startup "mako"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "xwayland-satellite"
