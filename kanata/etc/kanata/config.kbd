@@ -1,0 +1,36 @@
+;; ===== Kanata configuration =====
+
+(defcfg
+  process-unmapped-keys yes
+)
+
+;; Variables
+(defvar
+ tap-time 300
+ hold-time 200
+ chord-time 60
+)
+
+ ;; keys we want to remap
+;; caps + h j k l must be defined here (order isn’t super important)
+(defsrc
+  caps h j k l u a s w '
+)
+
+;; default layer — normal typing
+(deflayer default
+  @cap _ _ _ _ _ _ _ _ _
+)
+
+;; arrows layer — activated while holding Caps
+(deflayer arrows
+ _ left down up rght esc bspc home end del
+)
+
+;; alias for the Caps key
+;; tap: send CapsLock
+;; hold: activate arrows layer while held
+(defalias
+  cap (tap-hold $tap-time $hold-time vk-caps (layer-while-held arrows))
+)
+

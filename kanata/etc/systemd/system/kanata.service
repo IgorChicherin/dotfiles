@@ -1,0 +1,14 @@
+[Unit]
+Description=Kanata key remapping daemon
+After=graphical.target
+Wants=graphical.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/kanata -c /etc/kanata/config.kbd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
