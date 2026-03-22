@@ -102,6 +102,13 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+fcd() {
+  local dir
+  dir=$(fd --type d --hidden --exclude .git | \
+    fzf --preview 'ls -la {}') && cd "$dir"
+}
+
 alias vc="nvim"
 alias ll="ls -lah"
 alias lg="lazygit"
