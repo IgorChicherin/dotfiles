@@ -112,3 +112,8 @@ fcd() {
 alias vc="nvim"
 alias ll="ls -lah"
 alias lg="lazygit"
+
+# Dark theme environment variables
+export GTK_THEME=Materia-dark
+export QT_QPA_PLATFORMTHEME=qt5ct
+export QT_STYLE_OVERRIDE=Fusion

@@ -1,0 +1,26 @@
+# Labwc environment configuration
+
+# GTK theme
+GTK_THEME=Adwaita-dark
+
+# XDG desktop environment
+XDG_CURRENT_DESKTOP=labwc
+XDG_SESSION_TYPE=wayland
+XDG_SESSION_DESKTOP=labwc
+GDK_BACKEND=wayland
+
+# Cursor
+XCURSOR_THEME=Adwaita
+XCURSOR_SIZE=24
+
+# Qt integration
+QT_QPA_PLATFORM=wayland
+QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+# Input method
+GTK_IM_MODULE=ibus
+QT_IM_MODULE=ibus
+XMODIFIERS=@im=ibus
+
+# DMS specific
+DMS_THEME=dark

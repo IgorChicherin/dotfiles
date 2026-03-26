@@ -68,7 +68,7 @@ input {
 // Find more information on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
-output "DP-1" {
+/-output "eDP-1" {
     // Uncomment this line to disable this output.
     // off
 
@@ -78,10 +78,10 @@ output "DP-1" {
     // for the resolution.
     // If the mode is omitted altogether or is invalid, niri will pick one automatically.
     // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
-    mode "3440x1440@144.000"
+    mode "1920x1080@120.030"
 
     // You can use integer or fractional scale, for example use 1.5 for 150% scale.
-    scale 1
+    scale 2
 
     // Transform allows to rotate the output counter-clockwise, valid values are:
     // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
@@ -96,7 +96,7 @@ output "DP-1" {
     // so to put another output directly adjacent to it on the right, set its x to 1920.
     // If the position is unset or results in an overlap, the output is instead placed
     // automatically.
-    // position x=1280 y=0
+    position x=1280 y=0
 }
 
 // Settings that influence how windows are positioned and sized.
@@ -251,17 +251,11 @@ layout {
 // See the binds section below for more spawn examples.
 // spawn-at-startup "alacritty" "-e" "fish"
 
+spawn-at-startup "dms run"
 spawn-at-startup "swaybg" "-i" "/home/ashzak/sunset_mountains_forest_illustration.jpg"
-spawn-at-startup "waybar" "-c" "/home/ashzak/.config/waybar/config" "-s" "/home/ashzak/.config/waybar/style.css"
 spawn-at-startup "mako"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "firefox"
-spawn-at-startup "ghostty"
-spawn-at-startup "com.discordapp.Discord"
-spawn-at-startup "com.rtosta.zapzap"
-spawn-at-startup "org.telegram.desktop"
-spawn-at-startup "~/Hyperion/bin/hyperiond"
 
 environment {
     DISPLAY ":0"

@@ -5,7 +5,7 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
 config.font = wezterm.font_with_fallback({ "0xProto Nerd Font", "JetBrains Mono" })
-config.font_size = 16
+config.font_size = 13
 
 local is_darwin = wezterm.target_triple:find("darwin") ~= nil
 local is_linux = wezterm.target_triple:find("linux") ~= nil
@@ -20,10 +20,11 @@ if is_windows then
 	config.default_prog = { "powershell" }
 end
 
--- Window decoration
+-- Window decoration - use RESIZE to let Hyprland handle window buttons
 config.window_decorations = "RESIZE"
 
 -- Tab bar configuration
+config.enable_tab_bar = true
 config.tab_bar_at_bottom = true
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false

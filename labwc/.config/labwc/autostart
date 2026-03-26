@@ -1,0 +1,15 @@
+#!/bin/bash
+# Labwc autostart script for DMS
+
+dms run &
+
+# Start notification daemon
+mako &
+
+# Start polkit authentication agent
+/usr/lib/polkit-kde-authentication-agent-1 &
+
+# Start xdg-desktop-portal for screen sharing and other portals
+/usr/lib/xdg-desktop-portal-wlr &
+sleep 1
+/usr/lib/xdg-desktop-portal &

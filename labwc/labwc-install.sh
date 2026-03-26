@@ -1,12 +1,12 @@
 #!/bin/bash
-# Niri installation script for Arch Linux
+# LabWC installation script using GNU Stow
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-echo "=== Niri Installation ==="
+echo "=== LabWC Installation ==="
 echo ""
 
 # Update system and install base dependencies
@@ -34,5 +34,20 @@ echo "Installing additional apps..."
 cat apps.lst | tr '\n' ' ' | xargs yay -S --needed --noconfirm --asdeps
 
 echo ""
+echo "Creating symlinks with stow..."
+
+# Use stow to create symlinks
+cd "$SCRIPT_DIR/.."
+stow labwc -v
+
+echo ""
+echo "Enabling auto-theme timer..."
+systemctl --user daemon-reload
+systemctl --user enable --now auto-theme.timer
+
+echo ""
 echo "=== Installation Complete ==="
+echo ""
+echo "Reload LabWC config with W-r or restart LabWC"
+echo "Check timer status: systemctl --user list-timers | grep auto-theme"
 echo ""

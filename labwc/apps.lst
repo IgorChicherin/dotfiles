@@ -1,3 +1,7 @@
+jq
+curl
+labwc
+bluez
 bluez
 bluez-utils
 lightdm
@@ -6,10 +10,13 @@ lightdm-gtk-greeter
 xorg-xwayland
 xwayland-satellite
 plymouth
-niri
-polkit-gnome
-firefox
-flatpak
+bluez-utils
+lightdm
+lightdm-slick-greeter
+lightdm-gtk-greeter
+xorg-xwayland
+xwayland-satellite
+plymouth
 gnome-software
 nautilus
 blueman

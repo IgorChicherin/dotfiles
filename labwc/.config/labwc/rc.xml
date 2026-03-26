@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<labwc_config>
+  <theme>
+    <name>Light</name>
+    <titleLayout>CLIM</titleLayout>
+    <keepBorder>yes</keepBorder>
+    <animateIconify>yes</animateIconify>
+    <font place="ActiveWindow">
+      <name>Cantarell</name>
+      <size>11</size>
+      <weight>bold</weight>
+    </font>
+    <font place="InactiveWindow">
+      <name>Cantarell</name>
+      <size>11</size>
+    </font>
+  </theme>
+
+  <keyboard>
+    <chainQuitKey>C-g</chainQuitKey>
+
+    <!-- DMS Integration Keybindings -->
+    <keybind key="W-Return">
+      <action name="Execute" command="wezterm start" />
+    </keybind>
+
+    <keybind key="W-d">
+      <action name="Execute" command="dms ipc launcher toggle" />
+    </keybind>
+
+    <keybind key="W-e">
+      <action name="Execute" command="dms ipc file browse" />
+    </keybind>
+
+    <keybind key="W-l">
+      <action name="Execute" command="dms ipc lock lock" />
+    </keybind>
+
+    <keybind key="W-Tab">
+      <action name="ShowWindowSwitcher" />
+    </keybind>
+
+    <keybind key="A-Tab">
+      <action name="NextWindow" />
+    </keybind>
+
+    <keybind key="A-F4">
+      <action name="Close" />
+    </keybind>
+
+    <keybind key="W-F4">
+      <action name="Close" />
+    </keybind>
+
+    <!-- DMS Control Center -->
+    <keybind key="W-c">
+      <action name="Execute" command="dms ipc control-center toggle" />
+    </keybind>
+
+    <!-- DMS Clipboard -->
+    <keybind key="W-v">
+      <action name="Execute" command="dms ipc clipboard open" />
+    </keybind>
+
+    <!-- DMS Notifications -->
+    <keybind key="W-n">
+      <action name="Execute" command="dms ipc notifications toggle" />
+    </keybind>
+
+    <!-- DMS Power Menu -->
+    <keybind key="W-Escape">
+      <action name="Execute" command="dms ipc powermenu open" />
+    </keybind>
+
+    <!-- Window management -->
+    <keybind key="W-Left">
+      <action name="SnapToEdge" direction="left" />
+    </keybind>
+    <keybind key="W-Right">
+      <action name="SnapToEdge" direction="right" />
+    </keybind>
+    <keybind key="W-Up">
+      <action name="SnapToEdge" direction="up" />
+    </keybind>
+    <keybind key="W-Down">
+      <action name="SnapToEdge" direction="down" />
+    </keybind>
+
+    <keybind key="W-Shift-Left">
+      <action name="MoveToEdge" direction="left" />
+    </keybind>
+    <keybind key="W-Shift-Right">
+      <action name="MoveToEdge" direction="right" />
+    </keybind>
+    <keybind key="W-Shift-Up">
+      <action name="MoveToEdge" direction="up" />
+    </keybind>
+    <keybind key="W-Shift-Down">
+      <action name="MoveToEdge" direction="down" />
+    </keybind>
+
+    <!-- Maximize -->
+    <keybind key="W-Up">
+      <action name="ToggleMaximize" />
+    </keybind>
+
+    <!-- Screenshot -->
+    <keybind key="Print">
+      <action name="Execute" command="dms screenshot" />
+    </keybind>
+
+    <keybind key="W-Print">
+      <action name="Execute" command="dms screenshot region" />
+    </keybind>
+
+    <!-- Reload labwc config -->
+    <keybind key="W-r">
+      <action name="Reconfigure" />
+    </keybind>
+  </keyboard>
+
+  <mouse>
+    <dragThreshold>1</dragThreshold>
+    <doubleClickTime>400</doubleClickTime>
+    <screenEdgeWarpTime>400</screenEdgeWarpTime>
+    <screenEdgeStopTime>400</screenEdgeStopTime>
+
+    <context name="Frame">
+      <mousebind button="A-Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="A-Left" action="Click">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="A-Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+      <mousebind button="A-Right" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+        <action name="Unshade" />
+      </mousebind>
+      <mousebind button="A-Right" action="Drag">
+        <action name="Resize" />
+      </mousebind>
+      <mousebind button="A-Middle" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+        <action name="Unshade" />
+      </mousebind>
+      <mousebind button="A-Middle" action="Drag">
+        <action name="Shade" />
+        <action name="Iconify" />
+      </mousebind>
+    </context>
+
+    <context name="Titlebar">
+      <mousebind button="Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+      <mousebind button="Left" action="DoubleClick">
+        <action name="ToggleMaximize" />
+      </mousebind>
+      <mousebind button="Up" action="Click">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="Down" action="Click">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+    </context>
+
+    <context name="Titlebar Top Left Bottom Right">
+      <mousebind button="Left" action="Drag">
+        <action name="Resize" edge="top" />
+      </mousebind>
+    </context>
+
+    <context name="Content">
+      <mousebind button="Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+    </context>
+
+    <context name="AllDesktops">
+      <mousebind button="Left" action="Click">
+        <action name="ToggleOmnipresent" />
+      </mousebind>
+    </context>
+
+    <context name="Maximize">
+      <mousebind button="Left" action="Click">
+        <action name="ToggleMaximize" />
+      </mousebind>
+    </context>
+
+    <context name="Iconify">
+      <mousebind button="Left" action="Click">
+        <action name="Iconify" />
+      </mousebind>
+    </context>
+
+    <context name="Close">
+      <mousebind button="Left" action="Click">
+        <action name="Close" />
+      </mousebind>
+    </context>
+
+    <context name="Root">
+      <mousebind button="Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="Right" action="Press">
+        <action name="ShowMenu" menu="root-menu" />
+      </mousebind>
+    </context>
+
+    <context name="Client">
+      <mousebind button="Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="Middle" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="Right" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+    </context>
+  </mouse>
+
+  <resize>
+    <drawBorders>yes</drawBorders>
+    <popupShow>Always</popupShow>
+  </resize>
+
+  <placement>
+    <policy>UnderMouse</policy>
+  </placement>
+
+  <focus>
+    <focusNew>yes</focusNew>
+    <follow>no</follow>
+    <lastFocusOnShow>yes</lastFocusOnShow>
+    <raiseOnFocus>no</raiseOnFocus>
+  </focus>
+
+  <actions>
+    <toggleMaximize>both</toggleMaximize>
+  </actions>
+
+  <margins>
+    <top>0</top>
+    <bottom>0</bottom>
+    <left>0</left>
+    <right>0</right>
+  </margins>
+
+  <dock>
+    <position>TopLeft</position>
+  </dock>
+
+  <menu name="root-menu">
+    <item label="Terminal">
+      <action name="Execute" command="wezterm start" />
+    </item>
+    <item label="Launcher">
+      <action name="Execute" command="dms ipc launcher toggle" />
+    </item>
+    <item label="Control Center">
+      <action name="Execute" command="dms ipc control-center toggle" />
+    </item>
+    <item label="Reload Config">
+      <action name="Reconfigure" />
+    </item>
+    <separator />
+    <item label="Exit">
+      <action name="Exit" />
+    </item>
+  </menu>
+</labwc_config>
