@@ -1,0 +1,17 @@
+# Common applications for both LabWC and Niri
+# Core utilities
+xorg-xwayland
+xwayland-satellite
+xdg-desktop-portal-gtk
+xdg-desktop-portal-wlr
+swayidle
+wlogout
+mako
+dms-shell-bin
+greetd-dms-greeter-git
+flatpak
+gnome-software
+nautilus
+polkit-gnome
+wezterm
+google-chrome

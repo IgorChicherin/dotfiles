@@ -9,6 +9,11 @@ XDG_SESSION_TYPE=wayland
 XDG_SESSION_DESKTOP=labwc
 GDK_BACKEND=wayland
 
+# Keyboard layout (US + Russian Mac, toggle with Alt+Shift)
+XKB_DEFAULT_LAYOUT=us,ru
+XKB_DEFAULT_VARIANT=,mac
+XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle
+
 # Cursor
 XCURSOR_THEME=Adwaita
 XCURSOR_SIZE=24

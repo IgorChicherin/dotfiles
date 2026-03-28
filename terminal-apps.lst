@@ -1,0 +1,30 @@
+# Terminal applications (shared between LabWC and Niri)
+# System monitoring
+btop
+fzf
+ncdu
+
+# Editor & Terminal
+neovim
+zsh
+
+# File management
+lf
+w3m
+
+# Search & Git
+ripgrep
+lazygit
+lazydocker
+lazysql
+
+# Utilities
+stow
+tldr
+jq
+fd
+curl
+
+# Fonts
+ttf-0xproto-nerd
+ttf-font-awesome

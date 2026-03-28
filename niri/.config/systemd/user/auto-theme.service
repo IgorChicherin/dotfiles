@@ -1,8 +1,0 @@
-[Unit]
-Description=Auto theme switcher based on sunrise/sunset
-After=network.target niri.service
-
-[Service]
-Type=oneshot
-ExecStart=/home/ashzak/.config/niri/auto-theme.py
-Environment=DISPLAY=:0

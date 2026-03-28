@@ -44,6 +44,40 @@
       <action name="NextWindow" />
     </keybind>
 
+    <!-- Virtual Desktops (W+1-5) -->
+    <keybind key="W-1">
+      <action name="GoToDesktop" to="1" />
+    </keybind>
+    <keybind key="W-2">
+      <action name="GoToDesktop" to="2" />
+    </keybind>
+    <keybind key="W-3">
+      <action name="GoToDesktop" to="3" />
+    </keybind>
+    <keybind key="W-4">
+      <action name="GoToDesktop" to="4" />
+    </keybind>
+    <keybind key="W-5">
+      <action name="GoToDesktop" to="5" />
+    </keybind>
+
+    <!-- Move window to desktop (W+Shift+1-5) -->
+    <keybind key="W-S-1">
+      <action name="SendToDesktop" to="1" />
+    </keybind>
+    <keybind key="W-S-2">
+      <action name="SendToDesktop" to="2" />
+    </keybind>
+    <keybind key="W-S-3">
+      <action name="SendToDesktop" to="3" />
+    </keybind>
+    <keybind key="W-S-4">
+      <action name="SendToDesktop" to="4" />
+    </keybind>
+    <keybind key="W-S-5">
+      <action name="SendToDesktop" to="5" />
+    </keybind>
+
     <keybind key="A-F4">
       <action name="Close" />
     </keybind>
@@ -67,9 +101,36 @@
       <action name="Execute" command="dms ipc notifications toggle" />
     </keybind>
 
+    <!-- DMS Processes (toggle like W-c control center) -->
+    <keybind key="W-p">
+      <action name="Execute" command="dms ipc processlist toggle" />
+    </keybind>
+
     <!-- DMS Power Menu -->
     <keybind key="W-Escape">
       <action name="Execute" command="dms ipc powermenu open" />
+    </keybind>
+
+    <!-- Audio Control (DMS) -->
+    <keybind key="XF86AudioRaiseVolume">
+      <action name="Execute" command="dms ipc audio increment 5" />
+    </keybind>
+    <keybind key="XF86AudioLowerVolume">
+      <action name="Execute" command="dms ipc audio decrement 5" />
+    </keybind>
+    <keybind key="XF86AudioMute">
+      <action name="Execute" command="dms ipc audio mute" />
+    </keybind>
+    <keybind key="XF86AudioMicMute">
+      <action name="Execute" command="dms ipc audio micmute" />
+    </keybind>
+
+    <!-- Brightness Control (DMS) -->
+    <keybind key="XF86MonBrightnessUp">
+      <action name="Execute" command="dms ipc brightness increment 10 backlight:intel_backlight" />
+    </keybind>
+    <keybind key="XF86MonBrightnessDown">
+      <action name="Execute" command="dms ipc brightness decrement 10 backlight:intel_backlight" />
     </keybind>
 
     <!-- Window management -->
@@ -244,6 +305,18 @@
   <placement>
     <policy>UnderMouse</policy>
   </placement>
+
+  <desktops>
+    <number>5</number>
+    <firstdesk>1</firstdesk>
+    <names>
+      <name>1</name>
+      <name>2</name>
+      <name>3</name>
+      <name>4</name>
+      <name>5</name>
+    </names>
+  </desktops>
 
   <focus>
     <focusNew>yes</focusNew>

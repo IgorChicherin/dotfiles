@@ -1,8 +1,8 @@
 [Unit]
 Description=Auto theme switcher based on sunrise/sunset
-After=network.target labwc.service
+After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/home/ashzak/.config/labwc/auto-theme.sh
+ExecStart=%h/.config/auto-theme.py
 Environment=DISPLAY=:0
