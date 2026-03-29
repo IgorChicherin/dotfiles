@@ -6,7 +6,6 @@ xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr
 swayidle
 wlogout
-mako
 dms-shell-bin
 greetd-dms-greeter-git
 flatpak
@@ -15,3 +14,4 @@ nautilus
 polkit-gnome
 wezterm
 google-chrome
+libnotify
