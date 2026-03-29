@@ -58,6 +58,31 @@ setup_systemd() {
     print_success "Systemd units installed"
 }
 
+setup_dms_greeter() {
+    echo "Setting up DMS greeter configuration..."
+    setup_stow "dms"
+    print_success "DMS greeter config stowed"
+    
+    echo "Configuring greeter group and permissions..."
+    sudo usermod -aG greeter "$USER" 2>/dev/null || print_warning "Could not add user to greeter group"
+    
+    # Set ACL permissions for greeter access
+    setfacl -m u:greeter:x ~ 2>/dev/null || true
+    setfacl -m u:greeter:x ~/.config 2>/dev/null || true
+    setfacl -m u:greeter:x ~/.local 2>/dev/null || true
+    setfacl -m u:greeter:x ~/.cache 2>/dev/null || true
+    setfacl -m u:greeter:x ~/.local/state 2>/dev/null || true
+    print_success "Greeter permissions configured"
+    
+    echo "Enabling greetd service..."
+    sudo systemctl enable greetd 2>/dev/null || print_warning "Could not enable greetd"
+    print_success "Greetd service enabled"
+    
+    echo "Syncing greeter theme..."
+    dms greeter sync 2>/dev/null || print_warning "Greeter sync failed (may need to run manually after reboot)"
+    print_success "Greeter theme synced"
+}
+
 # =============================================================================
 # Main Installation
 # =============================================================================
@@ -150,10 +175,13 @@ esac
 # Setup symlinks with Stow (skip for terminal-only mode)
 if [ "$MODE" != "terminal" ]; then
     print_header "GNU Stow Symlinks"
-    
+
     # Setup systemd units first (auto-theme timer)
     setup_systemd
-    
+
+    # Setup DMS greeter config
+    setup_dms_greeter
+
     case $MODE in
         labwc)
             setup_stow "labwc"
@@ -200,12 +228,14 @@ case $MODE in
         echo "  • Terminal applications (btop, neovim, zsh, lazygit, etc.)"
         echo "  • Common applications (nautilus, blueman, mako, etc.)"
         echo "  • Auto-theme switcher (sunrise/sunset based)"
+        echo "  • DMS greeter (login screen)"
         ;;
     niri)
         echo "  • Niri Scrollable Wayland Compositor"
         echo "  • Terminal applications (btop, neovim, zsh, lazygit, etc.)"
         echo "  • Common applications (nautilus, blueman, mako, etc.)"
         echo "  • Auto-theme switcher (sunrise/sunset based)"
+        echo "  • DMS greeter (login screen)"
         ;;
     full)
         echo "  • LabWC Wayland Compositor"
@@ -213,6 +243,7 @@ case $MODE in
         echo "  • Terminal applications (btop, neovim, zsh, lazygit, etc.)"
         echo "  • Common applications (nautilus, blueman, mako, etc.)"
         echo "  • Auto-theme switcher (sunrise/sunset based)"
+        echo "  • DMS greeter (login screen)"
         ;;
 esac
 
@@ -224,20 +255,20 @@ case $MODE in
         echo "  • Try: btop, lf, lazygit, nvim, zsh"
         ;;
     labwc)
-        echo "  1. Enable display manager: sudo systemctl enable lightdm"
-        echo "  2. Reboot or logout"
-        echo "  3. Select LabWC session at login"
+        echo "  1. Reboot or logout"
+        echo "  2. DMS greeter will appear at login"
+        echo "  3. Select LabWC session"
         echo "  4. Reload config with W-r"
         ;;
     niri)
-        echo "  1. Set niri as default session (see README.md)"
-        echo "  2. Reboot or logout"
-        echo "  3. Select Niri session at login"
+        echo "  1. Reboot or logout"
+        echo "  2. DMS greeter will appear at login"
+        echo "  3. Select Niri session"
         ;;
     full)
-        echo "  1. Enable display manager: sudo systemctl enable lightdm"
-        echo "  2. Reboot or logout"
-        echo "  3. Select LabWC or Niri session at login"
+        echo "  1. Reboot or logout"
+        echo "  2. DMS greeter will appear at login"
+        echo "  3. Select LabWC or Niri session"
         ;;
 esac
 
@@ -247,6 +278,9 @@ if [ "$MODE" != "terminal" ]; then
     echo "  • Check auto-theme timer: systemctl --user list-timers | grep auto-theme"
     echo "  • View auto-theme logs: journalctl --user -u auto-theme -f"
     echo "  • Reload compositor config: W-r"
+    echo "  • Sync greeter theme: dms greeter sync"
+    echo "  • Check greeter status: dms greeter status"
+    echo "  • Toggle night mode: dms ipc gamma night/off"
 else
     echo "  • Terminal apps: btop, lf, lazygit, nvim"
 fi

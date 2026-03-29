@@ -14,6 +14,7 @@ Personal dotfiles for Arch Linux with Wayland compositors.
 | `tmux` | Tmux terminal multiplexer |
 | `kanata` | Keyboard remapping (CapsLock → arrows) |
 | `systemd` | Auto-theme switcher service |
+| `dms` | DankMaterialShell settings & greeter config |
 | `wallpapers` | Wallpaper collection |
 
 ---
@@ -298,8 +299,16 @@ Sunrise/sunset based theme switcher.
 - IP geolocation (with offline fallback)
 - Caches sun times (1 hour) and location
 - Switches GTK2/3/4, Chrome, DMS themes
+- **Auto night mode (gamma adjustment at sunset)**
 - D-Bus signals for app notifications
 - Runs every 1 minute via systemd timer
+
+### Behavior
+
+| Time | Theme | Night Mode |
+|------|-------|------------|
+| Sunrise → Sunset | Light | Disabled (6500K) |
+| Sunset → Sunrise | Dark | Enabled (4500K) |
 
 ### Affected Applications
 
@@ -307,6 +316,7 @@ Sunrise/sunset based theme switcher.
 - Chrome/Chromium browsers
 - WezTerm (auto-detects)
 - DMS (via IPC)
+- Night mode (gamma/temperature adjustment)
 
 ### Manual Control
 
@@ -335,6 +345,48 @@ journalctl --user -u auto-theme -f
 | `systemd/.config/auto-theme.py` | Theme switcher script |
 | `systemd/.config/systemd/user/auto-theme.service` | Systemd service |
 | `systemd/.config/systemd/user/auto-theme.timer` | Timer (1 min interval) |
+
+---
+
+## DMS Greeter
+
+Login screen theme management with greetd.
+
+### Setup
+
+```bash
+# Enable greeter (requires sudo)
+dms greeter install -y
+
+# Sync user theme to greeter
+dms greeter sync
+```
+
+### Theme Switching
+
+The greeter automatically syncs with your DMS desktop theme:
+- Manual: `dms greeter sync` after changing themes
+- Auto: Via `auto-theme.py` (sunrise/sunset)
+
+### Configuration
+
+| File | Purpose |
+|------|---------|
+| `dms/.config/DankMaterialShell/settings.json` | Greeter theme settings |
+| `/etc/greetd/config.toml` | Greetd configuration (dms-greeter + labwc) |
+
+### Available Themes
+
+Built-in themes: `blue`, `red`, `green`, `purple`, `orange`, `pink`, `teal`, `brown`
+
+Edit `settings.json` to change:
+```json
+{
+  "currentThemeName": "blue",
+  "fontFamily": "Cantarell",
+  "cornerRadius": 12
+}
+```
 
 ---
 

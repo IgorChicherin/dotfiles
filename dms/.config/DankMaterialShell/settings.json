@@ -1,0 +1,12 @@
+{
+  "use24HourClock": true,
+  "weatherEnabled": true,
+  "currentThemeName": "blue",
+  "customThemeFile": "",
+  "matugenScheme": "scheme-tonal-spot",
+  "iconTheme": "System Default",
+  "fontFamily": "Cantarell",
+  "cornerRadius": 12,
+  "animationSpeed": 1.0,
+  "launcherStyle": "modern"
+}

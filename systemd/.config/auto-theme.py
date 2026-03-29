@@ -184,13 +184,27 @@ def is_night(sun: SunTimes) -> bool:
 # =============================================================================
 
 def switch_theme(is_dark: bool) -> None:
-    """Switch system theme using DMS IPC and Flatpak."""
+    """Switch system theme and night mode based on time of day."""
     theme_cmd = "dark" if is_dark else "light"
-    
+
     # DMS theme
     run_cmd(["dms", "ipc", "theme", theme_cmd])
     print(f"DMS: Set theme to {theme_cmd}")
-    
+
+    # DMS greeter theme sync
+    run_cmd(["dms", "greeter", "sync"])
+    print(f"DMS Greeter: Synced theme")
+
+    # DMS night mode (gamma adjustment for eye comfort)
+    if is_dark:
+        # Enable night mode with warmer color temperature (4500K)
+        run_cmd(["dms", "ipc", "gamma", "night"])
+        print("DMS: Night mode enabled (4500K)")
+    else:
+        # Disable night mode (return to normal 6500K)
+        run_cmd(["dms", "ipc", "gamma", "off"])
+        print("DMS: Night mode disabled")
+
     # Flatpak global theme override (for GTK apps)
     gtk_theme = "Adwaita-dark" if is_dark else "Adwaita"
     run_cmd(["flatpak", "override", "--user", f"--env=GTK_THEME={gtk_theme}"])
