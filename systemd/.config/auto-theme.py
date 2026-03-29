@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Auto theme switcher based on sunrise/sunset with auto location detection.
 
-Uses standard GTK/KDE color-scheme settings that apps check.
-Supports: GTK3, GTK4, GTK2, Chrome, KDE Plasma
+Uses DMS IPC for theme switching.
 """
 
 import json
@@ -185,75 +184,17 @@ def is_night(sun: SunTimes) -> bool:
 # =============================================================================
 
 def switch_theme(is_dark: bool) -> None:
-    """Switch system theme (GTK + Chrome support)."""
-    scheme = "prefer-dark" if is_dark else "prefer-light"
-    gtk_theme = GTK_THEME_DARK if is_dark else GTK_THEME_LIGHT
-
-    # GTK settings
-    run_cmd(["gsettings", "set", "org.gnome.desktop.interface", "color-scheme", scheme])
-    run_cmd(["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", gtk_theme])
-
-    # GTK3 config
-    gtk3 = Path.home() / ".config" / "gtk-3.0" / "settings.ini"
-    gtk3.parent.mkdir(parents=True, exist_ok=True)
-    gtk3.write_text(f"[Settings]\ngtk-application-prefer-dark-theme={str(is_dark).lower()}\ngtk-theme-name={gtk_theme}\n")
-
-    # GTK4 config
-    gtk4 = Path.home() / ".config" / "gtk-4.0" / "settings.ini"
-    gtk4.parent.mkdir(parents=True, exist_ok=True)
-    gtk4.write_text(f"[Settings]\ngtk-application-prefer-dark-theme={str(is_dark).lower()}\n")
-
-    # GTK2 config
-    gtk2 = Path.home() / ".gtk-2.0" / "gtkrc"
-    gtk2.parent.mkdir(parents=True, exist_ok=True)
-    gtk2.write_text(f'gtk-theme-name="{gtk_theme}"\n')
-
-    # Chrome config
-    _update_chrome_theme(is_dark)
-
-    # D-Bus signal for portal apps
-    run_cmd([
-        "gdbus", "emit", "--session",
-        "--dest", "org.freedesktop.portal.Desktop",
-        "--object-path", "/org/freedesktop/portal/desktop",
-        "--interface", "org.freedesktop.portal.Settings",
-        "--signal", "SettingChanged",
-        "string:org.freedesktop.appearance",
-        "string:color-scheme",
-        "uint32:1" if is_dark else "uint32:0"
-    ])
-
-    print(f"GTK: Set color-scheme to {scheme}, gtk-theme to {gtk_theme}")
-
-
-def _update_chrome_theme(is_dark: bool) -> None:
-    """Update Chrome theme configuration."""
-    theme = "dark" if is_dark else "light"
-    chrome_dir = Path.home() / ".config" / "google-chrome"
-
-    # Local State
-    state_file = chrome_dir / "Local State"
-    if state_file.exists():
-        try:
-            data = json.loads(state_file.read_text())
-            data.setdefault("browser", {})["theme_name"] = theme
-            state_file.write_text(json.dumps(data))
-            print(f"Chrome Local State: Set theme_name to {theme}")
-        except Exception as e:
-            print(f"Failed to update Chrome Local State: {e}", file=sys.stderr)
-
-    # Profile Preferences (Default profile)
-    prefs_file = chrome_dir / "Default" / "Preferences"
-    if prefs_file.exists():
-        try:
-            data = json.loads(prefs_file.read_text())
-            data.setdefault("browser", {})["theme_name"] = theme
-            data.setdefault("profile", {})["theme_name"] = theme
-            prefs_file.write_text(json.dumps(data))
-            print(f"Chrome Preferences: Set theme_name to {theme}")
-        except Exception as e:
-            print(f"Failed to update Chrome Preferences: {e}", file=sys.stderr)
-
+    """Switch system theme using DMS IPC and Flatpak."""
+    theme_cmd = "dark" if is_dark else "light"
+    
+    # DMS theme
+    run_cmd(["dms", "ipc", "theme", theme_cmd])
+    print(f"DMS: Set theme to {theme_cmd}")
+    
+    # Flatpak global theme override (for GTK apps)
+    gtk_theme = "Adwaita-dark" if is_dark else "Adwaita"
+    run_cmd(["flatpak", "override", "--user", f"--env=GTK_THEME={gtk_theme}"])
+    print(f"Flatpak: Set global GTK_THEME to {gtk_theme}")
 
 # =============================================================================
 # Main
