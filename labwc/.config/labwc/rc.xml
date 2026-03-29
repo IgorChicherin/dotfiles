@@ -24,8 +24,12 @@
       <action name="Execute" command="wezterm start" />
     </keybind>
 
+    <keybind key="W-Space">
+      <action name="Execute" command="dms ipc widget toggle launcherButton" />
+    </keybind>
+
     <keybind key="W-d">
-      <action name="Execute" command="dms ipc launcher toggle" />
+      <action name="Execute" command="dms ipc dash open system" />
     </keybind>
 
     <keybind key="W-e">
@@ -101,9 +105,9 @@
       <action name="Execute" command="dms ipc notifications toggle" />
     </keybind>
 
-    <!-- DMS Processes (toggle like W-c control center) -->
+    <!-- DMS System Dashboard (CPU/RAM/processes - same as clicking CPU in Dank Bar) -->
     <keybind key="W-p">
-      <action name="Execute" command="dms ipc processlist toggle" />
+      <action name="Execute" command="dms ipc widget toggle cpuUsage" />
     </keybind>
 
     <!-- DMS Power Menu -->

@@ -74,24 +74,52 @@ Stacking Wayland window manager with DMS (Dank Material Shell) integration.
 
 | Key | Action |
 |-----|--------|
+| `W-Space` | Toggle app launcher widget (Dank Bar) |
 | `W-Return` | Open terminal (wezterm) |
-| `W-d` | Open app launcher (DMS) |
+| `W-d` | System dashboard (dash view) |
 | `W-e` | File browser |
 | `W-l` | Lock screen |
 | `W-Tab` | Window switcher |
+| `A-Tab` | Next window |
 | `W-c` | Control Center |
 | `W-v` | Clipboard |
 | `W-n` | Notifications |
-| `W-p` | Process list (top bar widget) |
+| `W-p` | CPU widget (same as clicking CPU in Dank Bar) |
 | `W-Escape` | Power menu |
 | `W-r` | Reload config |
 
-#### Desktop Switching
+#### Window Management
 
 | Key | Action |
 |-----|--------|
-| `W-1` to `W-5` | Switch to desktop 1-5 |
-| `W-Shift-1` to `W-Shift-5` | Move window to desktop 1-5 |
+| `W-Left/Right/Up/Down` | Snap to edge |
+| `W-Shift-Left/Right/Up/Down` | Move to edge |
+| `W-1-5` | Switch to desktop 1-5 |
+| `W-Shift-1-5` | Move window to desktop 1-5 |
+| `A-F4` / `W-F4` | Close window |
+
+#### Media Keys
+
+| Key | Action |
+|-----|--------|
+| `XF86AudioRaiseVolume` | Volume up 5% |
+| `XF86AudioLowerVolume` | Volume down 5% |
+| `XF86AudioMute` | Mute toggle |
+| `XF86AudioMicMute` | Mic mute toggle |
+| `XF86MonBrightnessUp` | Brightness up 10% |
+| `XF86MonBrightnessDown` | Brightness down 10% |
+| `Print` | Screenshot |
+| `W-Print` | Region screenshot |
+
+#### DMS Panels
+
+| Key | Action |
+|-----|--------|
+| `W-c` | Control Center |
+| `W-v` | Clipboard |
+| `W-n` | Notifications |
+| `W-p` | System dashboard (CPU/RAM/processes - same as clicking CPU in Dank Bar) |
+| `W-Escape` | Power menu |
 
 #### Window Management
 
@@ -146,7 +174,6 @@ Scrollable Wayland compositor with smooth animations.
 |-----|--------|
 | `Mod+T` | Open terminal (ghostty) |
 | `Mod+E` | Open file manager (nautilus) |
-| `Alt+Space` | Open launcher (fuzzel) |
 | `Mod+Q` | Close window |
 | `Mod+H/J/K/L` | Navigate windows |
 | `Mod+Shift+H/J/K/L` | Move windows |
