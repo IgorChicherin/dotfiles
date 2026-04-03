@@ -1,10 +1,15 @@
--- [[ Setting options ]]
+-- [[ Neovim 0.12 Configuration ]]
+-- Uses vim.pack (built-in plugin manager), vim.lsp.config/enable (native LSP),
+-- and other 0.12 features.
+
+-- ============================================================
+-- Options
+-- ============================================================
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
 
--- Options
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = "a"
@@ -27,14 +32,70 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 vim.opt.path:append("**")
 
-
 if vim.uv.os_uname().sysname == "Windows_NT" then
 	vim.o.shell = "powershell"
 end
 
+-- Neovim 0.12: diagnostic jump config uses float key
 vim.diagnostic.config({ jump = { float = true } })
+
 vim.opt.complete = ".,w,b,u,t"
 vim.opt.pumheight = 10
+
+-- Neovim 0.12: enable native autocomplete in insert mode
+vim.opt.autocomplete = true
+
+-- Neovim 0.12: inline diff in diffopt
+vim.opt.diffopt:append("inline:char")
+
+if vim.g.have_nerd_font then
+	local signs = { ERROR = " ", WARN = " ", INFO = " ", HINT = " " }
+	local diagnostic_signs = {}
+	for type, icon in pairs(signs) do
+		diagnostic_signs[vim.diagnostic.severity[type]] = icon
+	end
+	vim.diagnostic.config({ signs = { text = diagnostic_signs } })
+end
+
+-- ============================================================
+-- vim.pack — Built-in Plugin Manager (Neovim 0.12+)
+-- ============================================================
+
+vim.pack.add({
+	-- LSP (configs loaded from nvim-lspconfig runtime)
+	{ src = "https://github.com/neovim/nvim-lspconfig.git" },
+
+	-- Treesitter
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter.git", build = ":TSUpdate" },
+
+	-- DAP
+	{ src = "https://github.com/mfussenegger/nvim-dap.git" },
+	{ src = "https://github.com/nvim-neotest/nvim-nio.git" },
+	{ src = "https://github.com/rcarriga/nvim-dap-ui.git" },
+
+	-- UI / UX
+	{ src = "https://github.com/folke/flash.nvim.git" },
+	{ src = "https://github.com/f-person/auto-dark-mode.nvim.git" },
+	{ src = "https://github.com/echasnovski/mini.nvim.git" },
+	{ src = "https://github.com/rafamadriz/friendly-snippets.git" },
+	{ src = "https://github.com/folke/tokyonight.nvim.git" },
+})
+
+-- Colorscheme
+local ok = pcall(vim.cmd.colorscheme, "tokyonight")
+if not ok then
+	vim.notify("Tokyonight theme not found, using default", vim.log.levels.WARN)
+end
+
+-- PackUpdate command
+vim.api.nvim_create_user_command("PackUpdate", function()
+	vim.notify("Updating plugins...", vim.log.levels.INFO)
+	vim.pack.update()
+end, { desc = "Update all plugins via vim.pack" })
+
+-- ============================================================
+-- LSP Configuration (Neovim 0.12 native API)
+-- ============================================================
 
 local function get_python()
 	local venv = os.getenv("VIRTUAL_ENV")
@@ -47,22 +108,70 @@ local function get_python()
 	return vim.fn.has("win32") == 1 and "python" or "python3"
 end
 
-if vim.g.have_nerd_font then
-	local signs = { ERROR = " ", WARN = " ", INFO = " ", HINT = " " }
-	local diagnostic_signs = {}
-	for type, icon in pairs(signs) do
-		diagnostic_signs[vim.diagnostic.severity[type]] = icon
-	end
-	vim.diagnostic.config({ signs = { text = diagnostic_signs } })
-end
+-- Global LSP config for all servers
+vim.lsp.config("*", {
+	capabilities = {
+		textDocument = {
+			completion = {
+				completionItem = {
+					snippetSupport = true,
+				},
+			},
+		},
+	},
+})
 
+-- Server-specific configs
+vim.lsp.config("gopls", {})
+
+vim.lsp.config("ruff", {})
+
+vim.lsp.config("basedpyright", {
+	settings = {
+		python = { pythonPath = get_python() },
+	},
+	basedpyright = {
+		analysis = {
+			autoSearchPaths = true,
+			diagnosticMode = "workspace",
+			useLibraryCodeForTypes = true,
+		},
+	},
+})
+
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			completion = { callSnippet = "Replace" },
+		},
+	},
+})
+
+vim.lsp.config("clangd", {
+	cmd = {
+		"clangd",
+		"--background-index",
+		"--clang-tidy",
+		"--header-insertion=iwyu",
+		"--completion-style=detailed",
+		"--function-arg-placeholders",
+		"--fallback-style=llvm",
+	},
+	init_options = {
+		usePlaceholders = true,
+		completeUnimported = true,
+		clangdFileStatus = true,
+	},
+})
+
+-- LSP keymaps (attached on LspAttach)
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
 	callback = function(event)
 		local map = vim.keymap.set
 		local opts = { noremap = true, silent = true, buffer = event.buf }
 
-		-- Включаем omnifunc для LSP автодополнения
+		-- Enable native LSP completion
 		vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = event.buf })
 
 		map("n", "gd", vim.lsp.buf.definition, opts)
@@ -73,13 +182,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		map("n", "[d", vim.diagnostic.goto_next, opts)
 		map("n", "]d", vim.diagnostic.goto_prev, opts)
 		map("n", "<leader>gr", vim.lsp.buf.references, opts)
+		map("n", "grt", vim.lsp.buf.type_definition, opts) -- 0.12
 		map("n", "<leader>cr", vim.lsp.buf.rename, opts)
 		map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 		map("n", "<leader>lf", vim.lsp.buf.format, opts)
 		map("i", "<C-k>", vim.lsp.buf.signature_help, opts)
 
+		-- Neovim 0.12: document highlight
 		local client = vim.lsp.get_client_by_id(event.data.client_id)
-		if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
 			local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
 			vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 				buffer = event.buf,
@@ -95,7 +206,70 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
--- [[ Utils ]]
+-- Enable LSP servers
+vim.lsp.enable({ "gopls", "ruff", "basedpyright", "lua_ls", "clangd" })
+
+-- ============================================================
+-- Treesitter (Neovim 0.12)
+-- ============================================================
+require("nvim-treesitter").setup({
+	ensure_installed = { "lua", "python", "go", "c", "cpp" },
+	highlight = {
+		enable = true,
+		additional_vim_regex_highlighting = false,
+	},
+})
+
+-- Ensure treesitter highlight runs on filetype
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "go", "lua", "python", "c", "cpp" },
+	callback = function(args)
+		local lang = vim.treesitter.language.get_lang(args.match)
+		if lang and pcall(vim.treesitter.get_parser, args.buf, lang) then
+			vim.treesitter.start(args.buf, lang)
+		end
+	end,
+})
+
+-- ============================================================
+-- DAP Configuration
+-- ============================================================
+local dap = require("dap")
+local dapui = require("dapui")
+
+dapui.setup()
+
+dap.configurations.python = {
+	{
+		type = "python",
+		request = "launch",
+		name = "Launch file",
+		program = "${file}",
+	},
+}
+
+dap.configurations.go = {
+	{
+		type = "go",
+		request = "launch",
+		name = "Debug",
+		program = "${file}",
+	},
+}
+
+-- DAP keymaps
+local map = vim.keymap.set
+map("n", "<F5>", function() dap.continue() end, { desc = "Run/Continue" })
+map("n", "<F7>", function() dap.step_into() end, { desc = "Step Into" })
+map("n", "<F8>", function() dap.step_over() end, { desc = "Step Over" })
+map("n", "<F9>", function() dap.step_out() end, { desc = "Step Out" })
+map("n", "<F10>", function() dap.terminate() end, { desc = "Terminate" })
+map("n", "<leader>db", function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
+map("n", "<leader>du", function() dapui.toggle() end, { desc = "Toggle DAP UI" })
+
+-- ============================================================
+-- Utils
+-- ============================================================
 local lazygit_win = nil
 local lazygit_buf = nil
 
@@ -203,9 +377,10 @@ local function rg_search_project()
 	vim.fn.setqflist({}, " ", { title = "rg Search", items = qf_list })
 	vim.cmd("copen")
 end
--- [[ Utils ]]
 
--- [[ Autocommands ]]
+-- ============================================================
+-- Autocommands
+-- ============================================================
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
@@ -213,9 +388,10 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank()
 	end,
 })
--- [[ Autocommands ]]
 
--- [[ Keymaps ]]
+-- ============================================================
+-- Keymaps
+-- ============================================================
 local map = vim.keymap.set
 
 map("n", "<Esc>", function()
@@ -275,170 +451,16 @@ map("n", "<leader>h", ":help", { desc = "Find help" })
 map("n", "<leader>sg", rg_search_project, { noremap = true, silent = true })
 map("n", "<leader>qq", "<cmd>silent! xa<cr><cmd>qa<cr>", { desc = "Quit All" })
 
+-- Neovim 0.12: plugin update keymap
+map("n", "<leader>pu", "<cmd>PackUpdate<CR>", { desc = "Update plugins" })
+
 if vim.fn.executable("lazygit") == 1 then
 	map("n", "<leader>gg", toggle_lazygit, { desc = "Lazygit (Root Dir)" })
 end
--- [[ Keymaps ]]
 
--- [[ vim.pack setup ]]
--- Bootstrap plugins with vim.pack (Neovim 0.12+)
-
-local pack_path = vim.fn.stdpath("data") .. "/site/pack/packer"
-
-local function ensure_dir(path)
-	vim.fn.mkdir(path, "p")
-end
-
-ensure_dir(pack_path .. "/start")
-ensure_dir(pack_path .. "/opt")
-
-local function clone_or_update(plugin, path)
-	local name = plugin:match("/([^/]+)$")
-	local dest = path .. "/start/" .. name
-
-	if not vim.loop.fs_stat(dest) then
-		print("Installing " .. name .. "...")
-		vim.fn.system({ "git", "clone", "--depth=1", "https://github.com/" .. plugin .. ".git", dest })
-	else
-		-- Optional: update plugins on startup
-		-- vim.fn.system({ "git", "-C", dest, "pull" })
-	end
-
-	vim.opt.rtp:prepend(dest)
-	return name
-end
-
--- Load all plugins in start/ (auto-loaded)
-local mason = clone_or_update("williamboman/mason.nvim", pack_path)
-local mason_lspconfig = clone_or_update("williamboman/mason-lspconfig.nvim", pack_path)
-local mason_tool_installer = clone_or_update("WhoIsSethDaniel/mason-tool-installer.nvim", pack_path)
-local lspconfig = clone_or_update("neovim/nvim-lspconfig", pack_path)
-local dap = clone_or_update("mfussenegger/nvim-dap", pack_path)
-local nvim_nio = clone_or_update("nvim-neotest/nvim-nio", pack_path)
-local dapui = clone_or_update("rcarriga/nvim-dap-ui", pack_path)
-local treesitter = clone_or_update("nvim-treesitter/nvim-treesitter", pack_path)
-local flash = clone_or_update("folke/flash.nvim", pack_path)
-local auto_dark = clone_or_update("f-person/auto-dark-mode.nvim", pack_path)
-local mini = clone_or_update("echasnovski/mini.nvim", pack_path)
-local snippets = clone_or_update("rafamadriz/friendly-snippets", pack_path)
-local tokyonight = clone_or_update("folke/tokyonight.nvim", pack_path)
-
--- Apply colorscheme after plugin is loaded
-local ok, _ = pcall(vim.cmd.colorscheme, "tokyonight")
-if not ok then
-	vim.notify("Tokyonight theme not found, using default", vim.log.levels.WARN)
-end
-
--- Load optional plugins after cloning
-require("mason").setup()
-require("mason-lspconfig").setup()
-
--- [[ LSP Configuration ]]
-local servers = {
-	gopls = {},
-	ruff = {},
-	basedpyright = {
-		settings = {
-			python = { pythonPath = get_python() },
-		},
-		basedpyright = {
-			analysis = {
-				autoSearchPaths = true,
-				diagnosticMode = "workspace",
-				useLibraryCodeForTypes = true,
-			},
-		},
-	},
-	lua_ls = {
-		settings = {
-			Lua = {
-				completion = { callSnippet = "Replace" },
-			},
-		},
-	},
-	clangd = {
-		cmd = {
-			"clangd",
-			"--background-index",
-			"--clang-tidy",
-			"--header-insertion=iwyu",
-			"--completion-style=detailed",
-			"--function-arg-placeholders",
-			"--fallback-style=llvm",
-		},
-		init_options = {
-			usePlaceholders = true,
-			completeUnimported = true,
-			clangdFileStatus = true,
-		},
-	},
-}
-
-for server_name, server_config in pairs(servers) do
-	vim.lsp.config(server_name, server_config)
-end
-
--- [[ mason-tool-installer ]]
-require("mason-tool-installer").setup({
-	ensure_installed = {
-		"gopls",
-		"ruff",
-		"basedpyright",
-		"lua-language-server",
-		"clangd",
-	},
-})
-
--- [[ DAP Configuration ]]
-local dap = require("dap")
-local dapui = require("dapui")
-
-dapui.setup()
-
-dap.configurations.python = {
-	{
-		type = "python",
-		request = "launch",
-		name = "Launch file",
-		program = "${file}",
-	},
-}
-
-dap.configurations.go = {
-	{
-		type = "go",
-		request = "launch",
-		name = "Debug",
-		program = "${file}",
-	},
-}
-
--- DAP keymaps
-map("n", "<F5>", function() dap.continue() end, { desc = "Run/Continue" })
-map("n", "<F7>", function() dap.step_into() end, { desc = "Step Into" })
-map("n", "<F8>", function() dap.step_over() end, { desc = "Step Over" })
-map("n", "<F9>", function() dap.step_out() end, { desc = "Step Out" })
-map("n", "<F10>", function() dap.terminate() end, { desc = "Terminate" })
-map("n", "<leader>db", function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
-map("n", "<leader>du", function() dapui.toggle() end, { desc = "Toggle DAP UI" })
-
--- [[ Treesitter ]]
-require("nvim-treesitter").setup({
-	ensure_installed = { "lua", "python", "go", "c", "cpp" },
-	highlight = { enable = true },
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "go",
-	callback = function()
-		local ok = pcall(vim.treesitter.get_parser, 0, "go")
-		if ok then
-			vim.treesitter.start()
-		end
-	end,
-})
-
--- [[ flash.nvim ]]
+-- ============================================================
+-- flash.nvim
+-- ============================================================
 require("flash").setup()
 map({ "n", "x", "o" }, "s", function() require("flash").jump() end, { desc = "Flash" })
 map({ "n", "o", "x" }, "S", function() require("flash").treesitter() end, { desc = "Flash Treesitter" })
@@ -446,12 +468,16 @@ map("o", "r", function() require("flash").remote() end, { desc = "Remote Flash" 
 map({ "o", "x" }, "R", function() require("flash").treesitter_search() end, { desc = "Treesitter Search" })
 map("c", "<c-s>", function() require("flash").toggle() end, { desc = "Toggle Flash Search" })
 
--- [[ auto-dark-mode.nvim ]]
+-- ============================================================
+-- auto-dark-mode.nvim
+-- ============================================================
 require("auto-dark-mode").setup({
 	update_interval = 1000,
 })
 
--- [[ mini.nvim ]]
+-- ============================================================
+-- mini.nvim
+-- ============================================================
 require("mini.basics").setup()
 require("mini.move").setup()
 require("mini.pairs").setup()
@@ -503,6 +529,7 @@ require("mini.completion").setup()
 local statusline = require("mini.statusline")
 local icons = require("mini.icons")
 
+-- Neovim 0.12: statusline section_location uses new API
 statusline.section_location = function() return "%2l:%-2v" end
 statusline.section_filename = function() return "%f" end
 statusline.section_fileinfo = function()
