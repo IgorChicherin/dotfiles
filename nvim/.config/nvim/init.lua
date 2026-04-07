@@ -424,7 +424,7 @@ map("i", "<CR>", function()
 end, { expr = true, desc = "Confirm completion or newline" })
 
 map("v", "<C-c>", '"+y')
-map("n", "<leader>t", toggle_terminal, { desc = "Toggle Terminal" })
+-- map("n", "<leader>t", toggle_terminal, { desc = "Toggle Terminal" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
