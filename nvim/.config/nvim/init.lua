@@ -451,6 +451,10 @@ map("n", "<leader>h", ":help", { desc = "Find help" })
 map("n", "<leader>sg", rg_search_project, { noremap = true, silent = true })
 map("n", "<leader>qq", "<cmd>silent! xa<cr><cmd>qa<cr>", { desc = "Quit All" })
 
+-- Buffer navigation
+map("n", "H", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+map("n", "L", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+
 -- Neovim 0.12: plugin update keymap
 map("n", "<leader>pu", "<cmd>PackUpdate<CR>", { desc = "Update plugins" })
 
