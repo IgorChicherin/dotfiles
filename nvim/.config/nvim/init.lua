@@ -32,8 +32,12 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 vim.opt.path:append("**")
 
-if vim.uv.os_uname().sysname == "Windows_NT" then
-	vim.o.shell = "powershell"
+if vim.loop.os_uname().sysname == "Windows_NT" then
+  vim.opt.shell = "powershell.exe"
+  vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+
+  vim.opt.shellquote = ""
+  vim.opt.shellxquote = ""
 end
 
 -- Neovim 0.12: diagnostic jump config uses float key
@@ -71,21 +75,15 @@ vim.pack.add({
 	-- DAP
 	{ src = "https://github.com/mfussenegger/nvim-dap.git" },
 	{ src = "https://github.com/nvim-neotest/nvim-nio.git" },
-	{ src = "https://github.com/rcarriga/nvim-dap-ui.git" },
+	{ src = "https://github.com/igorlfs/nvim-dap-view" },
 
 	-- UI / UX
 	{ src = "https://github.com/folke/flash.nvim.git" },
 	{ src = "https://github.com/f-person/auto-dark-mode.nvim.git" },
 	{ src = "https://github.com/echasnovski/mini.nvim.git" },
 	{ src = "https://github.com/rafamadriz/friendly-snippets.git" },
-	{ src = "https://github.com/folke/tokyonight.nvim.git" },
 })
 
--- Colorscheme
-local ok = pcall(vim.cmd.colorscheme, "tokyonight")
-if not ok then
-	vim.notify("Tokyonight theme not found, using default", vim.log.levels.WARN)
-end
 
 -- PackUpdate command
 vim.api.nvim_create_user_command("PackUpdate", function()
@@ -235,9 +233,9 @@ vim.api.nvim_create_autocmd("FileType", {
 -- DAP Configuration
 -- ============================================================
 local dap = require("dap")
-local dapui = require("dapui")
+local dapview = require("dap-view")
 
-dapui.setup()
+dapview.setup()
 
 dap.configurations.python = {
 	{
@@ -272,38 +270,6 @@ map("n", "<leader>du", function() dapui.toggle() end, { desc = "Toggle DAP UI" }
 -- ============================================================
 local lazygit_win = nil
 local lazygit_buf = nil
-
-local function get_terminal_buffer()
-	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if vim.api.nvim_get_option_value("buftype", { buf = buf }) == "terminal" then
-			return buf
-		end
-	end
-	return nil
-end
-
-local function toggle_terminal()
-	local term_buf = get_terminal_buffer()
-
-	if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
-		local found_win = nil
-		for _, win in ipairs(vim.api.nvim_list_wins()) do
-			if vim.api.nvim_win_get_buf(win) == term_buf then
-				found_win = win
-				break
-			end
-		end
-
-		if found_win then
-			vim.api.nvim_win_close(found_win, false)
-		else
-			vim.cmd("sb " .. term_buf)
-			vim.cmd("startinsert")
-		end
-	else
-		vim.cmd("sp | term")
-	end
-end
 
 local function toggle_lazygit()
 	if lazygit_win and vim.api.nvim_win_is_valid(lazygit_win) then
@@ -389,6 +355,13 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+vim.api.nvim_set_hl(0, "FlashLabel", {
+  fg = "#ffffff",
+  bg = "#ff007c",
+  bold = true,
+})
+
+
 -- ============================================================
 -- Keymaps
 -- ============================================================
@@ -432,20 +405,6 @@ map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
 map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
-map("n", "<leader>e", function()
-	local netrw_open = false
-	for _, win in ipairs(vim.api.nvim_list_wins()) do
-		local buf = vim.api.nvim_win_get_buf(win)
-		if vim.bo[buf].filetype == "netrw" then
-			netrw_open = true
-			vim.api.nvim_buf_delete(0, {})
-		end
-	end
-	if not netrw_open then
-		vim.cmd("Ex")
-	end
-end, { desc = "Open file explorer" })
-
 map("n", "<leader><leader>", ":find ", { desc = "Find file" })
 map("n", "<leader>h", ":help", { desc = "Find help" })
 map("n", "<leader>sg", rg_search_project, { noremap = true, silent = true })
@@ -465,7 +424,7 @@ end
 -- ============================================================
 -- flash.nvim
 -- ============================================================
-require("flash").setup()
+require("flash").setup({ label = { bg = "#ff007c" } })
 map({ "n", "x", "o" }, "s", function() require("flash").jump() end, { desc = "Flash" })
 map({ "n", "o", "x" }, "S", function() require("flash").treesitter() end, { desc = "Flash Treesitter" })
 map("o", "r", function() require("flash").remote() end, { desc = "Remote Flash" })
