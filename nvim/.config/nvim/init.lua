@@ -379,7 +379,7 @@ map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 map({ "n", "i", "v" }, "<C-s>", "<cmd>w!<cr>", { desc = "Save file" })
 
 map("n", "<leader>bd", function()
-	vim.api.nvim_buf_delete(0, {})
+	vim.api.nvim_buf_delete(0, { force = vim.bo.buftype == "terminal" })
 end, { desc = "Buffer delete" })
 
 map("n", "<leader>x", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
