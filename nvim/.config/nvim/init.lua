@@ -31,6 +31,8 @@ vim.opt.splitbelow = true
 vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 vim.opt.path:append("**")
+vim.opt.wildmenu = true
+vim.opt.wildmode = "longest:full,full"
 
 if vim.loop.os_uname().sysname == "Windows_NT" then
   vim.opt.shell = "powershell.exe"
@@ -361,6 +363,13 @@ vim.api.nvim_set_hl(0, "FlashLabel", {
   bold = true,
 })
 
+-- Auto close Netrw
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "netrw",
+    callback = function()
+        vim.bo.bufhidden = "wipe"
+    end,
+})
 
 -- ============================================================
 -- Keymaps
