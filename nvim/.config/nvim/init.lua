@@ -85,6 +85,9 @@ vim.pack.add({
 	{ src = "https://github.com/f-person/auto-dark-mode.nvim.git" },
 	{ src = "https://github.com/echasnovski/mini.nvim.git" },
 	{ src = "https://github.com/rafamadriz/friendly-snippets.git" },
+
+	-- Auto change dir
+	{ src = "https://github.com/albenisolmos/autochdir.nvim" },
 })
 
 
@@ -522,3 +525,7 @@ require("mini.completion").setup()
 -- statusline.setup({ use_icons = vim.g.have_nerd_font })
 
 require("mini.misc").setup({ make_global = { "put", "put_text" } })
+
+require("autochdir").setup({
+  generic_flags = { "README.md", ".git", ".gitignore", ".dockerignore" },
+})
