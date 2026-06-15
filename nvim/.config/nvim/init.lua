@@ -62,10 +62,11 @@ if vim.g.have_nerd_font then
 	end
 	vim.diagnostic.config({ signs = { text = diagnostic_signs } })
 end
-
 -- ============================================================
 -- vim.pack — Built-in Plugin Manager (Neovim 0.12+)
 -- ============================================================
+vim.cmd("packadd nvim.undotree")
+require("vim._core.ui2").enable()
 
 vim.pack.add({
 	-- LSP (configs loaded from nvim-lspconfig runtime)
@@ -406,7 +407,7 @@ map("i", "<CR>", function()
 end, { expr = true, desc = "Confirm completion or newline" })
 
 map("v", "<C-c>", '"+y')
--- map("n", "<leader>t", toggle_terminal, { desc = "Toggle Terminal" })
+map("n", "<leader>u", require("undotree").open, { desc = "Undo tree" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
