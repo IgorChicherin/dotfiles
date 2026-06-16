@@ -14,6 +14,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = "a"
 vim.opt.showmode = false
+vim.o.cmdheight = 0
 vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
@@ -498,34 +499,35 @@ ai.setup({
 require("mini.notify").setup()
 require("mini.git").setup()
 require("mini.icons").setup()
--- require("mini.tabline").setup()
+require("mini.tabline").setup()
 
 require("mini.completion").setup()
 
--- local statusline = require("mini.statusline")
--- local icons = require("mini.icons")
+local statusline = require("mini.statusline")
+local icons = require("mini.icons")
 --
 -- -- Neovim 0.12: statusline section_location uses new API
--- statusline.section_location = function() return "%2l:%-2v" end
--- statusline.section_filename = function() return "%f" end
--- statusline.section_fileinfo = function()
--- 	local filetype = vim.bo.filetype
--- 	if filetype == "" then return "" end
--- 	filetype = icons.get("filetype", filetype) .. " " .. filetype
--- 	local size = vim.fn.getfsize(vim.fn.getreg("%"))
--- 	if size < 1024 then
--- 		size = string.format("%dB", size)
--- 	elseif size < 1048576 then
--- 		size = string.format("%.2fKiB", size / 1024)
--- 	else
--- 		size = string.format("%.2fMiB", size / 1048576)
--- 	end
--- 	return string.format("%s %s", filetype, size)
--- end
--- statusline.setup({ use_icons = vim.g.have_nerd_font })
+statusline.section_location = function() return "%2l:%-2v" end
+statusline.section_filename = function() return "%f" end
+statusline.section_fileinfo = function()
+	local filetype = vim.bo.filetype
+	if filetype == "" then return "" end
+	filetype = icons.get("filetype", filetype) .. " " .. filetype
+	local size = vim.fn.getfsize(vim.fn.getreg("%"))
+	if size < 1024 then
+		size = string.format("%dB", size)
+	elseif size < 1048576 then
+		size = string.format("%.2fKiB", size / 1024)
+	else
+		size = string.format("%.2fMiB", size / 1048576)
+	end
+	return string.format("%s %s", filetype, size)
+end
+statusline.setup({ use_icons = vim.g.have_nerd_font })
 
 require("mini.misc").setup({ make_global = { "put", "put_text" } })
 
 require("autochdir").setup({
   generic_flags = { "README.md", ".git", ".gitignore", ".dockerignore" },
 })
+
