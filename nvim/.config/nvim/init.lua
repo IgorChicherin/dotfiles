@@ -36,10 +36,6 @@ vim.opt.path:append("**")
 vim.opt.wildmenu = true
 vim.opt.wildmode = "longest:full,full"
 
--- fuzzy for completion
-vim.opt.completeopt = "menuone,fuzzy,popup"
-vim.opt.wildoptions = "fuzzy,pum"
-
 if vim.loop.os_uname().sysname == "Windows_NT" then
   vim.opt.shell = "powershell.exe"
   vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
@@ -418,6 +414,7 @@ end, { expr = true, desc = "Confirm completion or newline" })
 map("v", "<C-c>", '"+y')
 map("n", "<leader>u", require("undotree").open, { desc = "Undo tree" })
 map("n", "<leader>e", "<cmd>Lexplore<cr>", { desc = "Netrw" })
+map("n", "<leader>w", function() vim.diagnostic.setqflist() end, { desc = "Errors list" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
