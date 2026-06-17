@@ -9,6 +9,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
+vim.g.netrw_winsize = 25
 
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -412,6 +413,7 @@ end, { expr = true, desc = "Confirm completion or newline" })
 
 map("v", "<C-c>", '"+y')
 map("n", "<leader>u", require("undotree").open, { desc = "Undo tree" })
+map("n", "<leader>e", "<cmd>Lexplore<cr>", { desc = "Netrw" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
