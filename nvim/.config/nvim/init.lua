@@ -36,6 +36,10 @@ vim.opt.path:append("**")
 vim.opt.wildmenu = true
 vim.opt.wildmode = "longest:full,full"
 
+-- fuzzy for completion
+vim.opt.completeopt = "menuone,fuzzy,popup"
+vim.opt.wildoptions = "fuzzy,pum"
+
 if vim.loop.os_uname().sysname == "Windows_NT" then
   vim.opt.shell = "powershell.exe"
   vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
