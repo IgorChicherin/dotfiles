@@ -216,7 +216,15 @@ ai.setup({
 
 require("mini.pick").setup()
 require("mini.git").setup()
-require("mini.notify").setup()
+require("mini.notify").setup({
+    window = {
+    config = {},
+  },
+
+  lsp_progress = {
+    enable = false,
+  },
+})
 require("mini.diff").setup()
 require("mini.tabline").setup()
 require("mini.icons").setup()
