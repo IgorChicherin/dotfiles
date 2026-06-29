@@ -244,9 +244,9 @@ miniclue.setup({
 		delay = 99,
 	},
 	triggers = {
-    { mode = "n", keys = "<Leader>" },
-    { mode = "x", keys = "<Leader>" },
-    { mode = "i", keys = "<C-x>" },
+		{ mode = "n", keys = "<Leader>" },
+		{ mode = "x", keys = "<Leader>" },
+		{ mode = "i", keys = "<C-x>" },
 		{ mode = "n", keys = "g" },
 		{ mode = "x", keys = "g" },
 		{ mode = "n", keys = "'" },
@@ -274,12 +274,12 @@ miniclue.setup({
 		{ mode = "n", keys = "<Leader>g", desc = "[g]it" },
 		{ mode = "n", keys = "<Leader>q", desc = "[q]uit/session" },
 		{ mode = "n", keys = "<Leader>s", desc = "[s]earch" },
-		{ mode = "n", keys = "<Leader>sG", desc = "[S]earch [G]it" },
+		{ mode = "n", keys = "<Leader>sG", desc = "Search [G]it" },
 		{ mode = "n", keys = "<Leader>w", desc = "[w]indows" },
 		{ mode = "n", keys = "<Leader>e", desc = "[e]xplorer" },
 		{ mode = "n", keys = "<Leader><Leader>", desc = "[f]ind files" },
-		{ mode = "n", keys = "<Leader>sGl", desc = "[S]earch [G]it [L]og" },
-		{ mode = "n", keys = "<Leader>sGs", desc = "[S]earch [G]it [S]tatus" },
+		{ mode = "n", keys = "<Leader>sGl", desc = "Search [G]it Log" },
+		{ mode = "n", keys = "<Leader>sGs", desc = "Search [G]it Status" },
 		{ mode = "n", keys = "<Leader>u", desc = "[u]i" },
 	},
 })
@@ -400,9 +400,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 
 		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-			map("<leader>th", function()
+			map("<leader>uh", function()
 				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-			end, "[t]oggle inlay hints")
+			end, "Toggle inlay [h]ints")
 		end
 	end,
 })
@@ -455,7 +455,7 @@ local servers = {
 	},
 	clangd = {
 		keys = {
-			{ "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+			{ "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/[h]eader (C/C++)" },
 		},
 		root_dir = function(fname)
 			return require("lspconfig.util").root_pattern(
@@ -682,8 +682,8 @@ map("n", "<Esc>", function()
 end)
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
-map("n", "<leader>U", require("undotree").open, { desc = "Undo tree" })
-map("n", "<leader>x", vim.diagnostic.setloclist, { desc = "Open diagnostic quickfix list" })
+map("n", "<leader>U", require("undotree").open, { desc = "[U]ndo tree" })
+map("n", "<leader>x", vim.diagnostic.setloclist, { desc = "Open diagnostic quickfi[x] list" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 map("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
@@ -698,73 +698,73 @@ map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window W
 
 map("n", "<leader>e", function()
 	snacks_picker().explorer()
-end, { desc = "Open file explorer" })
+end, { desc = "Open file [e]xplorer" })
 
 map("n", "<leader><leader>", function()
 	snacks_picker().picker.files()
 end, { desc = "Find file" })
 
-map("n", "<leader>qq", "<cmd>silent! xa<cr><cmd>qa<cr>", { desc = "Quit All" })
+map("n", "<leader>qq", "<cmd>silent! xa<cr><cmd>qa<cr>", { desc = "[q]uit All" })
 
 map("n", "<leader>sf", function()
 	snacks_picker().picker.files()
-end, { desc = "[S]earch [F]ile" })
+end, { desc = "Search [f]ile" })
 map("n", "<leader>sp", function()
 	snacks_picker().picker.projects()
-end, { desc = "[S]earch [P]roject" })
+end, { desc = "Search [p]roject" })
 map("n", "<leader>sb", function()
 	snacks_picker().picker.buffers()
-end, { desc = "[S]earch [B]uffer" })
+end, { desc = "Search [b]uffer" })
 map("n", "<leader>sg", function()
 	snacks_picker().picker.grep()
-end, { desc = "[S]earch [G]rep" })
+end, { desc = "Search [g]rep" })
 map("n", "<leader>sc", function()
 	snacks_picker().picker.files({ cwd = vim.fn.stdpath("config") })
-end, { desc = "[S]earch [C]onfig file" })
+end, { desc = "Search [c]onfig file" })
 map("n", "<leader>sh", function()
 	snacks_picker().picker.command_history()
-end, { desc = "[S]earch command [h]istory" })
+end, { desc = "Search command [h]istory" })
 map("n", "<leader>sC", function()
 	snacks_picker().picker.commands()
-end, { desc = "[S]earch [C]ommands" })
+end, { desc = "Search [C]ommands" })
 map("n", "<leader>sH", function()
 	snacks_picker().picker.help()
-end, { desc = "[S]earch [H]elp" })
+end, { desc = "Search [H]elp" })
 map("n", "<leader>sk", function()
 	snacks_picker().picker.keymaps()
-end, { desc = "[S]earch [k]eymaps" })
+end, { desc = "Search [k]eymaps" })
 map("n", "<leader>sm", function()
 	snacks_picker().picker.marks()
-end, { desc = "[S]earch [m]arks" })
+end, { desc = "Search [m]arks" })
 map("n", "<leader>sq", function()
 	snacks_picker().picker.qflist()
-end, { desc = "[S]earch [q]uickfix" })
+end, { desc = "Search [q]uickfix" })
 map("n", "<leader>sr", function()
 	snacks_picker().picker.registers()
-end, { desc = "[S]earch [r]egisters" })
+end, { desc = "Search [r]egisters" })
 map("n", "<leader>uC", function()
 	snacks_picker().picker.colorschemes()
-end, { desc = "[U]I [C]olorschemes" })
+end, { desc = "UI [C]olorschemes" })
 map("n", "<leader>sGl", function()
 	snacks_picker().picker.git_log()
-end, { desc = "[S]earch [G]it [L]og" })
+end, { desc = "Search Git [l]og" })
 map("n", "<leader>sGs", function()
 	snacks_picker().picker.git_status()
-end, { desc = "[S]earch [G]it [S]tatus" })
+end, { desc = "Search Git [s]tatus" })
 
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other [b]uffer" })
 map("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 map("n", "<leader>bd", function()
 	snacks_picker().bufdelete()
-end, { desc = "Delete Buffer" })
+end, { desc = "[d]elete Buffer" })
 map("n", "<leader>bo", function()
 	snacks_picker().bufdelete.other()
-end, { desc = "Delete Other Buffers" })
-map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+end, { desc = "Delete [o]ther Buffers" })
+map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "[D]elete Buffer and Window" })
 
 map("n", "<c-/>", function()
 	snacks_picker().terminal(nil, { cwd = vim.uv.cwd() })
@@ -781,13 +781,13 @@ end, { desc = "[f]ormat buffer" })
 
 map("n", "<leader>qs", function()
 	require("persistence").load()
-end, { desc = "Load session for current dir" })
+end, { desc = "Load [s]ession for current dir" })
 map("n", "<leader>qS", function()
 	require("persistence").select()
-end, { desc = "Find session" })
+end, { desc = "Find [S]ession" })
 map("n", "<leader>ql", function()
 	require("persistence").load({ last = true })
-end, { desc = "Load last session" })
+end, { desc = "Load [l]ast session" })
 
 map("n", "[e", function()
 	vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR, wrap = true })
@@ -804,29 +804,29 @@ end, { desc = "Go to next WARNING" })
 
 vim.schedule(function()
 	local toggle = snacks_picker().toggle
-	toggle.option("spell", { name = "Spelling" }):map("<leader>us")
-	toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-	toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
-	toggle.diagnostics():map("<leader>ud")
-	toggle.line_number():map("<leader>ul")
+	toggle.option("spell", { name = "[s]pelling" }):map("<leader>us")
+	toggle.option("wrap", { name = "[w]rap" }):map("<leader>uw")
+	toggle.option("relativenumber", { name = "Relative [L]ine number" }):map("<leader>uL")
+	toggle.diagnostics({ name = "[d]iagnostics" }):map("<leader>ud")
+	toggle.line_number({ name = "[l]ine number" }):map("<leader>ul")
 	toggle
-		.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = "Conceal Level" })
+		.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = "[c]onceal Level" })
 		:map("<leader>uc")
 	toggle
-		.option("showtabline", { off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = "Tabline" })
-		:map("<leader>uA")
+		.option("showtabline", { off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = "[t]abline" })
+		:map("<leader>ut")
 	toggle.treesitter():map("<leader>uT")
-	toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
-	toggle.dim():map("<leader>uD")
-	toggle.animate():map("<leader>ua")
-	toggle.indent():map("<leader>ug")
-	toggle.scroll():map("<leader>uS")
+	toggle.option("background", { off = "light", on = "dark", name = "Dark [b]ackground" }):map("<leader>ub")
+	toggle.dim({ name = "[D]im" }):map("<leader>uD")
+	toggle.animate({ name = "[a]nimate" }):map("<leader>ua")
+	toggle.indent({ name = "[i]ndent" }):map("<leader>ui")
+	toggle.scroll({ name = "[S]croll" }):map("<leader>uS")
 	toggle.profiler():map("<leader>dpp")
 	toggle.profiler_highlights():map("<leader>dph")
 	toggle
 		.new({
 			id = "format_on_save",
-			name = "Format on Save (global)",
+			name = "[f]ormat on Save (global)",
 			get = function()
 				return not vim.g.disable_autoformat
 			end,
@@ -838,7 +838,7 @@ vim.schedule(function()
 	toggle
 		.new({
 			id = "format_on_save_buffer",
-			name = "Format on Save (buffer)",
+			name = "[F]ormat on Save (buffer)",
 			get = function()
 				return not vim.b.disable_autoformat
 			end,
@@ -847,8 +847,38 @@ vim.schedule(function()
 			end,
 		})
 		:map("<leader>uF")
-	toggle.zoom():map("<leader>wm"):map("<leader>uZ")
-	toggle.zen():map("<leader>uz")
+	toggle
+		.new({
+			id = "zoom",
+			name = "[Z]oom",
+			get = function()
+				return Snacks.zen.win and Snacks.zen.win:valid() or false
+			end,
+			set = function(state)
+				if state then
+					Snacks.zen.zoom()
+				elseif Snacks.zen.win then
+					Snacks.zen.win:close()
+				end
+			end,
+		})
+		:map("<leader>uZ")
+	toggle
+		.new({
+			id = "zen",
+			name = "[z]en",
+			get = function()
+				return Snacks.zen.win and Snacks.zen.win:valid() or false
+			end,
+			set = function(state)
+				if state then
+					Snacks.zen()
+				elseif Snacks.zen.win then
+					Snacks.zen.win:close()
+				end
+			end,
+		})
+		:map("<leader>uz")
 end)
 
 map("n", "<leader>w", "<c-w>", { desc = "Windows", remap = true })
@@ -859,19 +889,19 @@ map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 if vim.fn.executable("lazygit") == 1 then
 	map("n", "<leader>gg", function()
 		snacks_picker().lazygit({ cwd = vim.uv.cwd() })
-	end, { desc = "Lazygit (Root Dir)" })
+	end, { desc = "Lazy[g]it (Root Dir)" })
 	map("n", "<leader>gG", function()
 		snacks_picker().lazygit()
-	end, { desc = "Lazygit (cwd)" })
+	end, { desc = "Lazy[G]it (cwd)" })
 	map("n", "<leader>gf", function()
 		snacks_picker().picker.git_log_file()
-	end, { desc = "Git Current File History" })
+	end, { desc = "Git Current [f]ile History" })
 	map("n", "<leader>gl", function()
 		snacks_picker().picker.git_log({ cwd = vim.uv.cwd() })
-	end, { desc = "Git Log" })
+	end, { desc = "Git [l]og" })
 	map("n", "<leader>gL", function()
 		snacks_picker().picker.git_log()
-	end, { desc = "Git Log (cwd)" })
+	end, { desc = "Git [L]og (cwd)" })
 end
 
 local flash = require("flash")
@@ -909,16 +939,16 @@ end, { desc = "Step Over" })
 map("n", "<F10>", function()
 	require("dap").terminate()
 end, { desc = "Terminate" })
-map("n", "<leader>du", function()
+map("n", "<leader>dv", function()
 	require("dap-view").toggle()
-end, { desc = "Toggle DAP View" })
+end, { desc = "Toggle DAP [v]iew" })
 map("n", "<leader>db", function()
 	require("dap").toggle_breakpoint()
-end, { desc = "Toggle Breakpoint" })
+end, { desc = "Toggle [b]reakpoint" })
 map("n", "<leader>dB", function()
 	local condition = vim.fn.input("Breakpoint condition (optional): ")
 	local hit_condition = vim.fn.input("Hit count (optional): ")
 	condition = condition ~= "" and condition or nil
 	hit_condition = hit_condition ~= "" and hit_condition or nil
 	require("dap").toggle_breakpoint(condition, hit_condition)
-end, { desc = "Advanced Breakpoint" })
+end, { desc = "Advanced [B]reakpoint" })
