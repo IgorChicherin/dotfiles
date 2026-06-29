@@ -266,6 +266,10 @@ miniclue.setup({
     { mode = "n", keys = "<Leader>d", desc = "[d]ebug" },
     { mode = "n", keys = "<Leader>g", desc = "[g]it" },
     { mode = "n", keys = "<Leader>q", desc = "[q]uit/session" },
+    { mode = "n", keys = "<Leader>s", desc = "[s]earch" },
+    { mode = "n", keys = "<Leader>w", desc = "[w]indows" },
+    { mode = "n", keys = "<Leader>e", desc = "[e]xplorer" },
+    { mode = "n", keys = "<Leader><Leader>", desc = "[f]ind files" },
     { mode = "n", keys = "<Leader>u", desc = "[u]i" },
   },
 })
@@ -388,7 +392,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
       map("<leader>th", function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-      end, "Toggle inlay hints")
+      end, "[t]oggle inlay hints")
     end
   end,
 })
@@ -763,7 +767,7 @@ map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
 map("n", "<leader>cf", function()
   require("conform").format({ async = true, lsp_format = "fallback" })
-end, { desc = "[F]ormat buffer" })
+end, { desc = "[f]ormat buffer" })
 
 map("n", "<leader>qs", function()
   require("persistence").load()
