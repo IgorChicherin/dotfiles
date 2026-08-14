@@ -1,0 +1,10 @@
+[Unit]
+Description=Run konsole auto theme switcher every 1 minute
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+Unit=konsole-auto-profile.service
+
+[Install]
+WantedBy=timers.target

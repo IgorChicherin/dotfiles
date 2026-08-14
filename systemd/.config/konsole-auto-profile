@@ -1,0 +1,26 @@
+#!/bin/bash
+
+LIGHT_PROFILE="Light"
+DARK_PROFILE="Dark"
+
+while true; do
+    scheme=$(kreadconfig6 --file kdeglobals \
+        --group General \
+        --key ColorScheme)
+
+    case "$scheme" in
+        *Dark*|*dark*)
+            profile="$DARK_PROFILE"
+            ;;
+        *)
+            profile="$LIGHT_PROFILE"
+            ;;
+    esac
+
+    kwriteconfig6 --file konsolerc \
+        --group "Desktop Entry" \
+        --key DefaultProfile \
+        "$profile.profile"
+
+    sleep 2
+done

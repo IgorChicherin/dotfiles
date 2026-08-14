@@ -1,0 +1,12 @@
+[Unit]
+Description=Automatically switch Konsole profile with KDE color scheme
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/konsole-auto-profile
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
