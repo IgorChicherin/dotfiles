@@ -72,11 +72,6 @@ vim.pack.add({
   -- LSP
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/williamboman/mason.nvim",
-  "https://github.com/williamboman/mason-lspconfig.nvim",
-  "https://github.com/jay-babu/mason-nvim-dap.nvim",
-  "https://github.com/stevearc/dressing.nvim",
-  "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
-  "https://github.com/j-hui/fidget.nvim",
   "https://github.com/folke/lazydev.nvim",
 
   -- Completion
@@ -88,29 +83,25 @@ vim.pack.add({
   "https://github.com/nvim-treesitter/nvim-treesitter",
 
   -- C/C++
-  "https://github.com/p00f/clangd_extensions.nvim",
   "https://github.com/Civitasv/cmake-tools.nvim",
+  "https://github.com/nvim-lua/plenary.nvim", -- required by cmake-tools
 
   -- DAP
   { src = "https://github.com/igorlfs/nvim-dap-view", version = vim.version.range("1.*") },
   "https://github.com/mfussenegger/nvim-dap",
-  "https://github.com/nvim-neotest/nvim-nio",
   "https://github.com/mfussenegger/nvim-dap-python",
   "https://github.com/leoluz/nvim-dap-go",
-  "https://github.com/theHamsta/nvim-dap-virtual-text",
 
   -- Utils
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/folke/flash.nvim",
-  "https://github.com/wintermute-cell/gitignore.nvim",
-  "https://github.com/nvim-telescope/telescope.nvim",
-  "https://github.com/albenisolmos/autochdir.nvim",
-  "https://github.com/f-person/auto-dark-mode.nvim",
   "https://github.com/tpope/vim-sleuth",
-  "https://github.com/nvim-lua/plenary.nvim",
 })
 
 vim.cmd("packadd nvim.undotree")
+
+-- 'background' follows the terminal (re-queried on theme change); tokyonight picks the style from it
+require("tokyonight").setup({ style = "moon", light_style = "day" })
 vim.cmd.colorscheme("tokyonight")
 
 -- [[ Plugin setup ]]
@@ -151,7 +142,6 @@ require("snacks").setup({
           desc = "Config",
           action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
         },
-        { icon = " ", key = "s", desc = "Restore Session", section = "session" },
         { icon = " ", key = "q", desc = "Quit", action = ":qa" },
       },
     },
@@ -200,42 +190,23 @@ require("mini.surround").setup({
 
 local ai = require("mini.ai")
 ai.setup({
-  {
-    n_lines = 500,
-    custom_textobjects = {
-      o = ai.gen_spec.treesitter({
-        a = { "@block.outer", "@conditional.outer", "@loop.outer" },
-        i = { "@block.inner", "@conditional.inner", "@loop.inner" },
-      }),
-      f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
-      c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
-      t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" },
-      d = { "%f[%d]%d+" },
-      e = {
-        { "%u[%l%d]+%f[^%l%d]", "%f[%S][%l%d]+%f[^%l%d]", "%f[%P][%l%d]+%f[^%l%d]", "^[%l%d]+%f[^%l%d]" },
-        "^().*()$",
-      },
-      u = ai.gen_spec.function_call(),
-      U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }),
+  n_lines = 500,
+  custom_textobjects = {
+    t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" },
+    d = { "%f[%d]%d+" },
+    e = {
+      { "%u[%l%d]+%f[^%l%d]", "%f[%S][%l%d]+%f[^%l%d]", "%f[%P][%l%d]+%f[^%l%d]", "^[%l%d]+%f[^%l%d]" },
+      "^().*()$",
     },
+    u = ai.gen_spec.function_call(),
+    U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }),
   },
 })
 
-require("mini.pick").setup()
 require("mini.git").setup()
-require("mini.notify").setup({
-  window = {
-    config = {},
-  },
-
-  lsp_progress = {
-    enable = false,
-  },
-})
 require("mini.diff").setup()
 require("mini.tabline").setup()
 require("mini.icons").setup()
-require("mini.fuzzy").setup()
 
 local miniclue = require("mini.clue")
 miniclue.setup({
@@ -322,8 +293,6 @@ require("mini.misc").setup({ make_global = { "put", "put_text" } })
 require("persistence").setup({})
 
 require("mason").setup({})
-require("fidget").setup({})
-require("dressing").setup({})
 require("lazydev").setup({
   library = {
     { path = "${3rd}/luv/library", words = { "vim%.uv" } },
@@ -343,7 +312,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
       require("snacks").picker.lsp_definitions()
     end, "Goto definition")
     map("gD", vim.lsp.buf.declaration, "Goto declaration")
-    map("gr", function()
+    -- "grr" rather than "gr", so the built-in gr* LSP maps (grn, gra, gri, grt) stay usable
+    map("grr", function()
       require("snacks").picker.lsp_references()
     end, "Goto references")
     map("gI", function()
@@ -352,8 +322,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("gy", function()
       require("snacks").picker.lsp_type_definitions()
     end, "Goto type definition")
-    map("K", vim.lsp.buf.hover, "Hover")
-    map("gx", vim.diagnostic.open_float, "Diagnostics")
+    map("<leader>cd", vim.diagnostic.open_float, "Line [d]iagnostics")
     map("gK", vim.lsp.buf.signature_help, "Signature help")
     map("<c-k>", vim.lsp.buf.signature_help, "Signature help", "i")
     map("<leader>cs", function()
@@ -370,14 +339,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("[[", function()
       require("snacks").words.jump(-vim.v.count1)
     end, "Prev reference", { "n", "x", "v" })
-    map("a-n", function()
-      require("snacks").words.lspjump(vim.v.count1, true)
+    map("<A-n>", function()
+      require("snacks").words.jump(vim.v.count1, true)
     end, "Next reference", { "n", "x", "v" })
-    map("a-p", function()
+    map("<A-p>", function()
       require("snacks").words.jump(-vim.v.count1, true)
     end, "Prev reference", { "n", "x", "v" })
 
     local client = vim.lsp.get_client_by_id(event.data.client_id)
+    if client and client.name == "clangd" then
+      map("<leader>ch", "<cmd>LspClangdSwitchSourceHeader<cr>", "Switch Source/[h]eader (C/C++)")
+    end
     if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
       local highlight_augroup = vim.api.nvim_create_augroup("user-lsp-highlight", { clear = false })
       vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -404,6 +376,22 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
       end, "Toggle inlay [h]ints")
     end
+  end,
+})
+
+-- Show LSP progress via the built-in progress messages (replaces fidget)
+vim.api.nvim_create_autocmd("LspProgress", {
+  group = vim.api.nvim_create_augroup("user-lsp-progress", { clear = true }),
+  callback = function(ev)
+    local value = ev.data.params.value
+    vim.api.nvim_echo({ { value.message or "done" } }, false, {
+      id = "lsp." .. ev.data.params.token,
+      kind = "progress",
+      source = "vim.lsp",
+      title = value.title,
+      status = value.kind ~= "end" and "running" or "success",
+      percent = value.percentage,
+    })
   end,
 })
 
@@ -435,12 +423,12 @@ local servers = {
       python = {
         pythonPath = get_python(),
       },
-    },
-    basedpyright = {
-      analysis = {
-        autoSearchPaths = true,
-        diagnosticMode = "workspace",
-        useLibraryCodeForTypes = true,
+      basedpyright = {
+        analysis = {
+          autoSearchPaths = true,
+          diagnosticMode = "workspace",
+          useLibraryCodeForTypes = true,
+        },
       },
     },
   },
@@ -454,22 +442,12 @@ local servers = {
     },
   },
   clangd = {
-    keys = {
-      { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/[h]eader (C/C++)" },
+    -- nested lists are tried in order of priority
+    root_markers = {
+      { "Makefile", "configure.ac", "configure.in", "config.h.in", "meson.build", "meson_options.txt", "build.ninja" },
+      { "compile_commands.json", "compile_flags.txt" },
+      ".git",
     },
-    root_dir = function(fname)
-      return require("lspconfig.util").root_pattern(
-        "Makefile",
-        "configure.ac",
-        "configure.in",
-        "config.h.in",
-        "meson.build",
-        "meson_options.txt",
-        "build.ninja"
-      )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(fname) or require(
-        "lspconfig.util"
-      ).find_git_ancestor(fname)
-    end,
     capabilities = {
       offsetEncoding = { "utf-16" },
     },
@@ -490,19 +468,22 @@ local servers = {
   },
 }
 
-local ensure_installed = vim.tbl_keys(servers)
-vim.list_extend(ensure_installed, { "stylua" })
-require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-require("mason-nvim-dap").setup({ ensure_installed = { "codelldb" }, automatic_setup = true })
+for name, config in pairs(servers) do
+  vim.lsp.config(name, config)
+end
+vim.lsp.enable(vim.tbl_keys(servers))
 
-require("mason-lspconfig").setup({
-  handlers = {
-    function(server_name)
-      local server = servers[server_name] or {}
-      require("lspconfig")[server_name].setup(server)
-    end,
-  },
-})
+-- Mason package names (differ from LSP config names for some servers)
+local mason_packages = { "gopls", "ruff", "basedpyright", "lua-language-server", "clangd", "stylua", "codelldb" }
+local registry = require("mason-registry")
+registry.refresh(function()
+  for _, name in ipairs(mason_packages) do
+    local ok, pkg = pcall(registry.get_package, name)
+    if ok and not pkg:is_installed() then
+      pkg:install()
+    end
+  end
+end)
 
 require("blink.cmp").build():pwait()
 require("blink.cmp").setup({
@@ -531,29 +512,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-require("clangd_extensions").setup({
-  inlay_hints = { inline = false },
-  ast = {
-    role_icons = {
-      type = "",
-      declaration = "",
-      expression = "",
-      specifier = "",
-      statement = "",
-      ["template argument"] = "",
-    },
-    kind_icons = {
-      Compound = "",
-      Recovery = "",
-      TranslationUnit = "",
-      PackExpansion = "",
-      TemplateTypeParm = "",
-      TemplateTemplateParm = "",
-      TemplateParamObject = "",
-    },
-  },
-})
-
 require("cmake-tools").setup({})
 
 require("dap-view").setup({
@@ -575,7 +533,6 @@ require("dap-view").setup({
 local dap = require("dap")
 local dap_go = require("dap-go")
 local dap_python = require("dap-python")
-require("nvim-dap-virtual-text").setup({ commented = true })
 dap_python.setup("python3")
 dap_go.setup()
 
@@ -648,22 +605,19 @@ require("conform").setup({
 })
 
 require("flash").setup({})
-require("gitignore")
-require("autochdir").setup({
-  generic_flags = { "README.md", ".git", ".gitignore", ".dockerignore" },
-})
 
-require("auto-dark-mode").setup({
-  update_interval = 1000,
-  set_dark_mode = function()
-    vim.api.nvim_set_option_value("background", "dark", {})
-    require("tokyonight").load({ style = "moon" })
+vim.api.nvim_create_autocmd("BufEnter", {
+  desc = "cd to the project root of the current file",
+  group = vim.api.nvim_create_augroup("user-autochdir", { clear = true }),
+  callback = function(args)
+    if vim.bo[args.buf].buftype ~= "" then
+      return
+    end
+    local root = vim.fs.root(args.buf, { ".git", "README.md", ".gitignore", ".dockerignore" })
+    if root and root ~= vim.fn.getcwd() then
+      vim.fn.chdir(root)
+    end
   end,
-  set_light_mode = function()
-    vim.api.nvim_set_option_value("background", "light", {})
-    require("tokyonight").load({ style = "day" })
-  end,
-  fallback = "light",
 })
 
 -- [[ Keymaps ]]
@@ -679,8 +633,8 @@ map("n", "<Esc>", function()
       vim.api.nvim_win_close(win, false)
     end
   end
+  vim.cmd.nohlsearch()
 end)
-map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 map("n", "<leader>U", require("undotree").open, { desc = "[U]ndo tree" })
 map("n", "<leader>x", vim.diagnostic.setloclist, { desc = "Open diagnostic quickfi[x] list" })
@@ -790,16 +744,16 @@ map("n", "<leader>ql", function()
 end, { desc = "Load [l]ast session" })
 
 map("n", "[e", function()
-  vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR, wrap = true })
+  vim.diagnostic.jump({ count = -vim.v.count1, severity = vim.diagnostic.severity.ERROR })
 end, { desc = "Go to previous ERROR" })
 map("n", "]e", function()
-  vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR, wrap = true })
+  vim.diagnostic.jump({ count = vim.v.count1, severity = vim.diagnostic.severity.ERROR })
 end, { desc = "Go to next ERROR" })
 map("n", "[w", function()
-  vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARNING, wrap = true })
+  vim.diagnostic.jump({ count = -vim.v.count1, severity = vim.diagnostic.severity.WARN })
 end, { desc = "Go to previous WARNING" })
 map("n", "]w", function()
-  vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARNING, wrap = true })
+  vim.diagnostic.jump({ count = vim.v.count1, severity = vim.diagnostic.severity.WARN })
 end, { desc = "Go to next WARNING" })
 
 vim.schedule(function()
