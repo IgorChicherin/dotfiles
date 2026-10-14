@@ -4,9 +4,12 @@ local wezterm = require("wezterm")
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
-config.font = wezterm.font_with_fallback({ 
-	{ family = "0xProto Nerd Font Mono",  weight = "Bold"}, 
-	{ family = "JetBrainsMono Nerd Font", weight = "DemiBold"} ,
+config.initial_cols = 120
+config.initial_rows = 35
+
+config.font = wezterm.font_with_fallback({
+	{ family = "0xProto Nerd Font Mono",  weight = "Bold" },
+	{ family = "JetBrainsMono Nerd Font", weight = "DemiBold" },
 })
 config.font_size = 13
 
