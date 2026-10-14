@@ -117,3 +117,5 @@ alias lg="lazygit"
 export GTK_THEME=Materia-dark
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_STYLE_OVERRIDE=Fusion
+
+export PATH=$PATH:~/.local/bin
