@@ -1,5 +1,6 @@
 font-family="0xProto Nerd Font Mono"  
 font-size=16 
+font-style=Bold
 theme=dark:TokyoNight Moon,light:TokyoNight Day
 
 # ssh compatibility fix
