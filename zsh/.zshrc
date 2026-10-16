@@ -118,3 +118,7 @@ export GTK_THEME=Materia-dark
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_STYLE_OVERRIDE=Fusion
 export PATH=$PATH:~/.local/bin
+
+# pacman shortcuts
+alias pss='pacman -Ss'
+alias pin='sudo pacman -Sy --noconfirm'
