@@ -11,7 +11,7 @@ config.font = wezterm.font_with_fallback({
 	{ family = "0xProto Nerd Font Mono",  weight = "Bold" },
 	{ family = "JetBrainsMono Nerd Font", weight = "DemiBold" },
 })
-config.font_size = 13
+config.font_size = 14
 
 local is_darwin = wezterm.target_triple:find("darwin") ~= nil
 local is_linux = wezterm.target_triple:find("linux") ~= nil
