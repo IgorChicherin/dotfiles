@@ -8,7 +8,7 @@ config.initial_cols = 120
 config.initial_rows = 35
 
 config.font = wezterm.font_with_fallback({
-	{ family = "0xProto Nerd Font Mono",  weight = "Bold" },
+	{ family = "0xProto Nerd Font Mono", weight = "Bold" },
 	{ family = "JetBrainsMono Nerd Font", weight = "DemiBold" },
 })
 config.font_size = 14
@@ -39,7 +39,7 @@ config.warn_about_missing_glyphs = false
 -- Color scheme
 local function scheme_for_appearance(appearance)
 	if appearance:find("Dark") then
-		return "Tokyo Night"
+		return "Tokyo Night Storm"
 	else
 		return "Tokyo Night Day"
 	end
